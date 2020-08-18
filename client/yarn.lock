@@ -9481,6 +9481,11 @@ react-scripts@3.4.3:
   optionalDependencies:
     fsevents "2.1.2"
 
+react-sequencer@^3.0.1:
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/react-sequencer/-/react-sequencer-3.0.1.tgz#b2ff4357c556c2d278e2235d250def2229f678ec"
+  integrity sha512-ktFgZVQ2Fy+GGto6qKvbgqhej0iYi2gq7m3GsPYi0uDuTSm6KpaKBqwayoyxHLuPSuryYy0nK4zDZM6YA2bVBA==
+
 react@^16.13.1:
   version "16.13.1"
   resolved "https://registry.yarnpkg.com/react/-/react-16.13.1.tgz#2e818822f1a9743122c063d6410d85c1e3afe48e"
