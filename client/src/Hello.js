@@ -1,27 +1,45 @@
 import React from 'react';
 import * as mm from "@magenta/music";
 import * as Tone from 'tone';
-import * as p5 from 'p5';
-import * as ml5 from 'ml5';
+// import * as p5 from 'p5';
+// import * as ml5 from 'ml5';
 
-export default (props) => {
-  const synth = new Tone.Synth().toDestination();
+console.log("MM MODULE:", mm);
 
-  const [foo, setFoo] = React.useState(1);
+let melodyRnn = new mm.MusicRNN("https://storage.googleapis.com/magentadata/js/checkpoints/music_rnn/melody_rnn");
+let melodyRnnLoaded = melodyRnn.initialize();
 
-  React.useEffect(() => {
-    setTimeout(() => setFoo(foo + 1), 1000);
-  });
+const Hello = (props) => {
+    const generateMelody = async () => {
+        await melodyRnnLoaded;
 
-  return (
-    <div>
-      { props.squid + " " + props.func(props.h) }
-      <br />
-      <button onClick={() => {
-        props.update();
-        synth.triggerAttackRelease(props.note, "8n");
-      }}>Play {props.note}</button>
-    </div>
-  );
-  
-};
+        let seed = {
+            notes: [
+            { pitch: Tone.Frequency('C#3').toMidi(), quantizedStartStep: 0, quantizedEndStep: 4 }
+            ],
+            totalQuantizedSteps: 4,
+            quantizationInfo: { stepsPerQuarter: 4}
+        };
+        let steps = 28;
+        let temperature = 1.2;
+
+        let result = await melodyRnn.continueSequence(seed, steps, temperature);
+
+        let combined = mm.sequences.concatenate([seed, result]);
+
+        // sequencer.matrix.populate.all([0]);
+        // for (let note of combined.notes) {
+        //     let column = note.quantizedStartStep;
+        //     let noteName = Tone.Frequency(note.pitch, 'midi').toNote();
+        //     let row = sequencerRows.indexOf(noteName);
+        //     if (row >= 0) {
+        //         sequencer.matrix.set.cell(column, row, 1);
+        //     }
+        // }
+        console.log(combined);
+    }
+
+    return <button onClick={generateMelody}>generate</button>
+}
+
+export default Hello;
