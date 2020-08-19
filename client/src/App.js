@@ -9,8 +9,6 @@ const App = () => {
 
   const lolol = x => x ** 3;
 
-  const lololol = x => x ** 4;
-
   const updateMe = () => {
     setH(h + 1);
   }
@@ -21,7 +19,6 @@ const App = () => {
       <br />
       <Hello note="C4" h={h} update={updateMe} squid="hello world" func={lol} />
       <Hello note="E4" h={h} update={updateMe} squid="squidward" func={lolol} />
-      <Hello note="G4" h={h} update={updateMe} squid="peen" func={lololol} />
     </div>
   );
 }
