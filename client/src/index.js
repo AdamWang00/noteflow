@@ -3,10 +3,13 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
+import * as Tone from 'tone';
+
+const synth = new Tone.Synth().toDestination();
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <App synth={synth} />
   </React.StrictMode>,
   document.getElementById('root')
 );
