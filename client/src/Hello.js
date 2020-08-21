@@ -1,6 +1,8 @@
 import React from 'react';
 import * as mm from "@magenta/music";
 import * as Tone from 'tone';
+import Vex from 'vexflow';
+const {StaveNote} = Vex.Flow;
 // import * as p5 from 'p5';
 // import * as ml5 from 'ml5';
 
@@ -27,16 +29,20 @@ const Hello = (props) => {
 
         let combined = mm.sequences.concatenate([seed, result]);
 
-        // sequencer.matrix.populate.all([0]);
-        // for (let note of combined.notes) {
-        //     let column = note.quantizedStartStep;
-        //     let noteName = Tone.Frequency(note.pitch, 'midi').toNote();
-        //     let row = sequencerRows.indexOf(noteName);
-        //     if (row >= 0) {
-        //         sequencer.matrix.set.cell(column, row, 1);
-        //     }
-        // }
-        console.log(combined);
+        var final_notes = [];
+        for (let note of combined.notes) {
+            let noteName = Tone.Frequency(note.pitch, 'midi').toNote();
+            noteName = noteName.substring(0, noteName.length - 1) + '/' + noteName[noteName.length - 1];
+            console.log(note.quantizedEndStep, note.quantizedStartStep);
+            let duration = 16 / (note.quantizedEndStep - note.quantizedStartStep);
+            let note_obj = new StaveNote({
+                keys: [noteName],
+                duration: duration,
+            });
+            final_notes.push(note_obj);
+        }
+        console.log(final_notes);
+
     }
 
     return <button onClick={generateMelody}>generate</button>
