@@ -32,12 +32,12 @@ const Hello = (props) => {
 
 
         let startSteps = [];
-        for (const note of combined.notes) {
+        for (let note of combined.notes) {
             startSteps.push(note.quantizedStartStep);
         }
         
         let noteRestsPairs = [];
-        for (const i = 0; i < startSteps.length; i++) {
+        for (let i = 0; i < startSteps.length; i++) {
             const startDiff = startSteps[i] - (i + 1 == startSteps.length ? 32 : startSteps[i + 1]);
             const noteRests = [];
             const time = Math.pow(2, Math.floor(Math.log(startDiff) / Math.log(2)));
@@ -56,7 +56,7 @@ const Hello = (props) => {
         }
         
         let finalNotes = [];
-        for (const i = 0; i < noteRestsPairs.length; i++) {
+        for (let i = 0; i < noteRestsPairs.length; i++) {
             let noteName = Tone.Frequency(combined[i].pitch, 'midi').toNote();
             noteName = noteName.substring(0, noteName.length - 1) + '/' + noteName[noteName.length - 1];
             const noteObj = new StaveNote({
