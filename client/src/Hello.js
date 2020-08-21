@@ -8,41 +8,42 @@ const {StaveNote} = Vex.Flow;
 
 console.log("MM MODULE:", mm);
 
-let melodyRnn = new mm.MusicRNN("https://storage.googleapis.com/magentadata/js/checkpoints/music_rnn/melody_rnn");
-let melodyRnnLoaded = melodyRnn.initialize();
+const melodyRnn = new mm.MusicRNN("https://storage.googleapis.com/magentadata/js/checkpoints/music_rnn/melody_rnn");
+const melodyRnnLoaded = melodyRnn.initialize();
 
 const Hello = (props) => {
+
     const generateMelody = async () => {
         await melodyRnnLoaded;
 
-        let seed = {
+        const seed = {
             notes: [
-            { pitch: Tone.Frequency('C#3').toMidi(), quantizedStartStep: 0, quantizedEndStep: 4 }
+            { pitch: Tone.Frequency('C4').toMidi(), quantizedStartStep: 0, quantizedEndStep: 4 }
             ],
             totalQuantizedSteps: 4,
             quantizationInfo: { stepsPerQuarter: 4}
         };
-        let steps = 28;
-        let temperature = 1.2;
+        const steps = 28;
+        const temperature = 1.2;
 
-        let result = await melodyRnn.continueSequence(seed, steps, temperature);
+        const result = await melodyRnn.continueSequence(seed, steps, temperature);
 
-        let combined = mm.sequences.concatenate([seed, result]);
+        const combined = mm.sequences.concatenate([seed, result]);
 
-        var final_notes = [];
-        for (let note of combined.notes) {
+        let finalNotes = [];
+        for (const note of combined.notes) {
             let noteName = Tone.Frequency(note.pitch, 'midi').toNote();
             noteName = noteName.substring(0, noteName.length - 1) + '/' + noteName[noteName.length - 1];
-            console.log(note.quantizedEndStep, note.quantizedStartStep);
-            let duration = 16 / (note.quantizedEndStep - note.quantizedStartStep);
-            let note_obj = new StaveNote({
+            const floored = Math.pow(2, Math.floor(Math.log(note.quantizedEndStep - note.quantizedStartStep) / Math.log(2)));
+            const duration = 16 / floored;
+            const noteObj = new StaveNote({
                 keys: [noteName],
-                duration: duration,
+                duration: duration.toString(),
             });
-            final_notes.push(note_obj);
+            finalNotes.push(noteObj);
         }
-        console.log(final_notes);
-
+        
+        props.updateNotes(finalNotes);
     }
 
     return <button onClick={generateMelody}>generate</button>

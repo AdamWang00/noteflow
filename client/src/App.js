@@ -31,7 +31,7 @@ const App = (props) => {
     // current note index
     const [index, setIndex] = React.useState(0);
 
-    const notes = [
+    const [notes, setNotes] = React.useState([
     new StaveNote({
         keys: ["g/4"],
         duration: "4",
@@ -56,7 +56,7 @@ const App = (props) => {
         keys: ["b/3"],
         duration: "8",
     }),
-    ];
+    ]);
     
     notes[index].setStyle({fillStyle: "orange", strokeStyle: "orange"});
     React.useEffect(() => {
@@ -85,7 +85,7 @@ const App = (props) => {
             <br />
             <button onClick={() => setPlay(!play)}>{play ? "Pause" : "Play"}</button>
             <Sequencer />
-            <Hello />
+            <Hello updateNotes={setNotes}/>
         </div>
         );
 }
