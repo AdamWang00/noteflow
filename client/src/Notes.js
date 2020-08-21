@@ -19,7 +19,7 @@ const Notes = (props) => {
         const svgContainer = document.createElement('div');
         const renderer = new Renderer(svgContainer, Renderer.Backends.SVG);
         const ctx = renderer.getContext();
-        const width = notes.length * 50;
+        const width = notes.length * 50 + 50;
         const stave = new Stave(0, 0, width);  // x, y, width
         stave.addClef("treble")/*.addTimeSignature("4/4")*/.setContext(ctx).draw();
         const bb = Formatter.FormatAndDraw(ctx, stave, notes, true);

@@ -2,7 +2,7 @@ import React from 'react';
 import * as mm from "@magenta/music";
 import * as Tone from 'tone';
 import Vex from 'vexflow';
-const {StaveNote} = Vex.Flow;
+const { Accidental, StaveNote } = Vex.Flow;
 // import * as p5 from 'p5';
 // import * as ml5 from 'ml5';
 
@@ -13,12 +13,13 @@ const melodyRnnLoaded = melodyRnn.initialize();
 
 const Hello = (props) => {
 
+    // TODO: add in natural signs
     const generateMelody = async () => {
         await melodyRnnLoaded;
 
         const seed = {
             notes: [
-            { pitch: Tone.Frequency('C4').toMidi(), quantizedStartStep: 0, quantizedEndStep: 4 }
+            { pitch: Tone.Frequency('C5').toMidi(), quantizedStartStep: 0, quantizedEndStep: 4 }
             ],
             totalQuantizedSteps: 4,
             quantizationInfo: { stepsPerQuarter: 4}
@@ -27,10 +28,7 @@ const Hello = (props) => {
         const temperature = 1.2;
 
         const result = await melodyRnn.continueSequence(seed, steps, temperature);
-
         const combined = mm.sequences.concatenate([seed, result]);
-
-        console.log(combined.notes);
 
         let startSteps = [];
         for (let note of combined.notes) {
@@ -42,20 +40,17 @@ const Hello = (props) => {
             const startDiff = (i + 1 == startSteps.length ? 32 : startSteps[i + 1]) - startSteps[i];
             const noteRests = [];
             const noteDuration = Math.pow(2, Math.floor(Math.log(startDiff) / Math.log(2)));
-            console.log("Note", noteDuration);
             noteRests[0] = (16 / noteDuration).toString();
 
             const restTime = startDiff - noteDuration;
             let counter = 1;
             const rests = [];
             while (counter <= restTime) {
-                console.log("rc", restTime, counter)
                 const include = restTime & counter;
                 if (include) rests.push((16 / counter).toString());
                 counter <<= 1;
             }
             noteRests[1] = rests;
-            console.log("Rests", rests);
             noteRestsPairs.push(noteRests);
         }
         
@@ -86,7 +81,7 @@ const Hello = (props) => {
         props.updateNotes(finalNotes);
     }
 
-    return <button onClick={generateMelody}>generate</button>
+    return <button onClick={generateMelody}>Generate</button>
 }
 
 export default Hello;

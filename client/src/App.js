@@ -34,28 +34,8 @@ const App = (props) => {
     // current notes
     const [notes, setNotes] = React.useState([
     new StaveNote({
-        keys: ["g/4"],
+        keys: ["c/5"],
         duration: "4",
-    }),
-    new StaveNote({
-        keys: ["g/4"],
-        duration: "8",
-    }),
-    new StaveNote({
-        keys: ["e/4"],
-        duration: "8",
-    }),
-    new StaveNote({
-        keys: ["b/4"],
-        duration: "8r"
-    }),
-    new StaveNote({
-        keys: ["f#/4"],
-        duration: "4",
-    }).addAccidental(0, new Accidental("#")),
-    new StaveNote({
-        keys: ["b/3"],
-        duration: "8",
     }),
     ]);
 
