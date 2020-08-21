@@ -8,41 +8,72 @@ const {StaveNote} = Vex.Flow;
 
 console.log("MM MODULE:", mm);
 
-let melodyRnn = new mm.MusicRNN("https://storage.googleapis.com/magentadata/js/checkpoints/music_rnn/melody_rnn");
-let melodyRnnLoaded = melodyRnn.initialize();
+const melodyRnn = new mm.MusicRNN("https://storage.googleapis.com/magentadata/js/checkpoints/music_rnn/melody_rnn");
+const melodyRnnLoaded = melodyRnn.initialize();
 
 const Hello = (props) => {
+
     const generateMelody = async () => {
         await melodyRnnLoaded;
 
-        let seed = {
+        const seed = {
             notes: [
-            { pitch: Tone.Frequency('C#3').toMidi(), quantizedStartStep: 0, quantizedEndStep: 4 }
+            { pitch: Tone.Frequency('C4').toMidi(), quantizedStartStep: 0, quantizedEndStep: 4 }
             ],
             totalQuantizedSteps: 4,
             quantizationInfo: { stepsPerQuarter: 4}
         };
-        let steps = 28;
-        let temperature = 1.2;
+        const steps = 28;
+        const temperature = 1.2;
 
-        let result = await melodyRnn.continueSequence(seed, steps, temperature);
+        const result = await melodyRnn.continueSequence(seed, steps, temperature);
 
-        let combined = mm.sequences.concatenate([seed, result]);
+        const combined = mm.sequences.concatenate([seed, result]);
 
-        var finalNotes = [];
-        for (let note of combined.notes) {
-            let noteName = Tone.Frequency(note.pitch, 'midi').toNote();
-            noteName = noteName.substring(0, noteName.length - 1) + '/' + noteName[noteName.length - 1];
-            console.log(note.quantizedEndStep, note.quantizedStartStep);
-            let duration = 16 / (note.quantizedEndStep - note.quantizedStartStep);
-            let note_obj = new StaveNote({
-                keys: [noteName],
-                duration: duration,
-            });
-            finalNotes.push(note_obj);
+
+        let startSteps = [];
+        for (const note of combined.notes) {
+            startSteps.push(note.quantizedStartStep);
         }
-        console.log(final_notes);
+        
+        let noteRestsPairs = [];
+        for (const i = 0; i < startSteps.length; i++) {
+            const startDiff = startSteps[i] - (i + 1 == startSteps.length ? 32 : startSteps[i + 1]);
+            const noteRests = [];
+            const time = Math.pow(2, Math.floor(Math.log(startDiff) / Math.log(2)));
+            noteRests[0] = time;
 
+            const restTime = startDiff - time;
+            let counter = 1;
+            const rests = [];
+            while (counter < restTime) {
+                const include = restTime & counter;
+                if (include) rests.push(counter);
+                counter <<= 1;
+            }
+            noteRests[1] = rests;
+            noteRestsPairs.push(noteRests);
+        }
+        
+        let finalNotes = [];
+        for (const i = 0; i < noteRestsPairs.length; i++) {
+            let noteName = Tone.Frequency(combined[i].pitch, 'midi').toNote();
+            noteName = noteName.substring(0, noteName.length - 1) + '/' + noteName[noteName.length - 1];
+            const noteObj = new StaveNote({
+                keys: [noteName],
+                duration: noteRestsPairs[i][0],
+            });
+            finalNotes.push(noteObj);
+            noteRestsPairs[i][1].forEach((restDuration) => {
+                const restObj = new StaveNote({
+                    keys: ["b/4"],
+                    duration: restDuration,
+                });
+                finalNotes.push(restObj);
+            });
+        }
+        
+        props.updateNotes(finalNotes);
     }
 
     return <button onClick={generateMelody}>generate</button>
