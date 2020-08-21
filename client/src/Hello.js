@@ -30,6 +30,7 @@ const Hello = (props) => {
 
         const combined = mm.sequences.concatenate([seed, result]);
 
+        console.log(combined.notes);
 
         let startSteps = [];
         for (let note of combined.notes) {
@@ -38,26 +39,29 @@ const Hello = (props) => {
         
         let noteRestsPairs = [];
         for (let i = 0; i < startSteps.length; i++) {
-            const startDiff = startSteps[i] - (i + 1 == startSteps.length ? 32 : startSteps[i + 1]);
+            const startDiff = (i + 1 == startSteps.length ? 32 : startSteps[i + 1]) - startSteps[i];
             const noteRests = [];
-            const time = Math.pow(2, Math.floor(Math.log(startDiff) / Math.log(2)));
-            noteRests[0] = time;
+            const noteDuration = Math.pow(2, Math.floor(Math.log(startDiff) / Math.log(2)));
+            console.log("Note", noteDuration);
+            noteRests[0] = (16 / noteDuration).toString();
 
-            const restTime = startDiff - time;
+            const restTime = startDiff - noteDuration;
             let counter = 1;
             const rests = [];
-            while (counter < restTime) {
+            while (counter <= restTime) {
+                console.log("rc", restTime, counter)
                 const include = restTime & counter;
-                if (include) rests.push(counter);
+                if (include) rests.push((16 / counter).toString());
                 counter <<= 1;
             }
             noteRests[1] = rests;
+            console.log("Rests", rests);
             noteRestsPairs.push(noteRests);
         }
         
         let finalNotes = [];
         for (let i = 0; i < noteRestsPairs.length; i++) {
-            let noteName = Tone.Frequency(combined[i].pitch, 'midi').toNote();
+            let noteName = Tone.Frequency(combined.notes[i].pitch, 'midi').toNote();
             noteName = noteName.substring(0, noteName.length - 1) + '/' + noteName[noteName.length - 1];
             const noteObj = new StaveNote({
                 keys: [noteName],
@@ -67,7 +71,7 @@ const Hello = (props) => {
             noteRestsPairs[i][1].forEach((restDuration) => {
                 const restObj = new StaveNote({
                     keys: ["b/4"],
-                    duration: restDuration,
+                    duration: restDuration + "r",
                 });
                 finalNotes.push(restObj);
             });
