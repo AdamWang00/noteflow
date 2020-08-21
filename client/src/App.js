@@ -25,12 +25,13 @@ const durationToFloat = {
 const App = (props) => {
     const synth = props.synth;
 
+    // play
     const [play, setPlay] = React.useState(false);
     // quarters per minute
     const [qpm, setQpm] = React.useState(120);
     // current note index
     const [index, setIndex] = React.useState(0);
-
+    // current notes
     const [notes, setNotes] = React.useState([
     new StaveNote({
         keys: ["g/4"],
@@ -64,7 +65,9 @@ const App = (props) => {
         setNotes(newNotes);
     };
     
+    notes[(index + notes.length - 1) % notes.length].setStyle({fillStyle: "black", strokeStyle: "black"});
     notes[index].setStyle({fillStyle: "orange", strokeStyle: "orange"});
+
     React.useEffect(() => {
         if (play && notes.length) {
             const note = notes[index];
