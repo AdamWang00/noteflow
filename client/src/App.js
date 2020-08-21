@@ -25,7 +25,7 @@ const durationToFloat = {
 const App = (props) => {
     const synth = props.synth;
 
-    const [play, setPlay] = React.useState(true);
+    const [play, setPlay] = React.useState(false);
     // quarters per minute
     const [qpm, setQpm] = React.useState(120);
     // current note index
