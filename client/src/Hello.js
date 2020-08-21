@@ -63,10 +63,16 @@ const Hello = (props) => {
         for (let i = 0; i < noteRestsPairs.length; i++) {
             let noteName = Tone.Frequency(combined.notes[i].pitch, 'midi').toNote();
             noteName = noteName.substring(0, noteName.length - 1) + '/' + noteName[noteName.length - 1];
+
             const noteObj = new StaveNote({
                 keys: [noteName],
                 duration: noteRestsPairs[i][0],
             });
+            
+            if (noteName.includes('#')) {
+                noteObj.addAccidental(0, new Accidental("#"));
+            }
+
             finalNotes.push(noteObj);
             noteRestsPairs[i][1].forEach((restDuration) => {
                 const restObj = new StaveNote({
