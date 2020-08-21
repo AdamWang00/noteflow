@@ -29,7 +29,7 @@ const Hello = (props) => {
 
         let combined = mm.sequences.concatenate([seed, result]);
 
-        var final_notes = [];
+        var finalNotes = [];
         for (let note of combined.notes) {
             let noteName = Tone.Frequency(note.pitch, 'midi').toNote();
             noteName = noteName.substring(0, noteName.length - 1) + '/' + noteName[noteName.length - 1];
@@ -39,7 +39,7 @@ const Hello = (props) => {
                 keys: [noteName],
                 duration: duration,
             });
-            final_notes.push(note_obj);
+            finalNotes.push(note_obj);
         }
         console.log(final_notes);
 
