@@ -57,6 +57,12 @@ const App = (props) => {
         duration: "8",
     }),
     ]);
+
+    const updateNotes = (newNotes) => {
+        setPlay(false);
+        setIndex(0);
+        setNotes(newNotes);
+    };
     
     notes[index].setStyle({fillStyle: "orange", strokeStyle: "orange"});
     React.useEffect(() => {
@@ -85,9 +91,9 @@ const App = (props) => {
             <br />
             <button onClick={() => setPlay(!play)}>{play ? "Pause" : "Play"}</button>
             <Sequencer />
-            <Hello updateNotes={setNotes}/>
+            <Hello updateNotes={updateNotes}/>
         </div>
-        );
+    );
 }
 
 export default App;
