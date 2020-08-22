@@ -1,7 +1,6 @@
 import React from 'react';
 import * as Tone from 'tone';
 import './App.css';
-import Sequencer from './Sequencer.js';
 import Hello from './Hello.js';
 import Notes from './Notes';
 import Vex from 'vexflow';
@@ -73,7 +72,6 @@ const App = (props) => {
             <Notes notes={notes} />
             <br />
             <button onClick={() => setPlay(!play)}>{play ? "Pause" : "Play"}</button>
-            <Sequencer />
             <Hello updateNotes={updateNotes}/>
         </div>
     );

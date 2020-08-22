@@ -12,7 +12,6 @@
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-scripts": "3.4.3",
-    "react-sequencer": "^3.0.1",
     "tone": "^14.7.39",
     "vexflow": "^3.0.9"
   },
