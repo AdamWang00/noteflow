@@ -23,22 +23,26 @@ const durationToFloat = {
 
 const App = (props) => {
     const synth = props.synth;
+    const validKeys = ["C","G","D","A","E","B","F#","C#","Cb","Gb","Db","Ab","Eb","Bb","F"];
 
-    // play
     const [play, setPlay] = React.useState(false);
-    // quarters per minute
     const [qpm, setQpm] = React.useState(120);
-    // current note index
     const [index, setIndex] = React.useState(0);
-    // current notes
+    const [key, setKey] = React.useState("C");
     const [notes, setNotes] = React.useState([
     new StaveNote({
-        keys: ["c/5"],
+        keys: ["C/5"],
         duration: "4",
     }),
     ]);
 
-    const updateNotes = (newNotes) => {
+    const onKeyChanged = e => {
+        let value = e.target.value || "C";
+        value = value.charAt(0).toUpperCase() + value.substring(1);
+        if (validKeys.includes(value)) setKey(value);
+    }
+
+    const updateNotes = newNotes => {
         setPlay(false);
         setIndex(0);
         setNotes(newNotes);
@@ -69,10 +73,12 @@ const App = (props) => {
 
     return (
         <div className="App">
-            <Notes notes={notes} />
+            <Notes notes={notes} keySignature={key}/>
+            <br />
+            Key: <input type="text" onChange={onKeyChanged} />
             <br />
             <button onClick={() => setPlay(!play)}>{play ? "Pause" : "Play"}</button>
-            <Hello updateNotes={updateNotes}/>
+            <Hello updateNotes={updateNotes} keySignature={key}/>
         </div>
     );
 }

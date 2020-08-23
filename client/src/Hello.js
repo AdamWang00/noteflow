@@ -2,20 +2,25 @@ import React from 'react';
 import * as mm from "@magenta/music";
 import * as Tone from 'tone';
 import Vex from 'vexflow';
+import { pitchToNote } from './utils.js';
 const { Accidental, StaveNote } = Vex.Flow;
 // import * as p5 from 'p5';
 // import * as ml5 from 'ml5';
-
-console.log("MM MODULE:", mm);
 
 const melodyRnn = new mm.MusicRNN("https://storage.googleapis.com/magentadata/js/checkpoints/music_rnn/melody_rnn");
 const melodyRnnLoaded = melodyRnn.initialize();
 
 const Hello = (props) => {
 
-    // TODO: add in natural signs
+    const { keySignature } = props;
+
+    const [started, setStarted] = React.useState(false);
+    const [melodyData, setMelodyData] = React.useState(null); // [combined, noteRestsPairs]
+
     const generateMelody = async () => {
         await melodyRnnLoaded;
+
+        if (!started) setStarted(true);
 
         const seed = {
             notes: [
@@ -30,12 +35,12 @@ const Hello = (props) => {
         const result = await melodyRnn.continueSequence(seed, steps, temperature);
         const combined = mm.sequences.concatenate([seed, result]);
 
-        let startSteps = [];
+        const startSteps = [];
         for (let note of combined.notes) {
             startSteps.push(note.quantizedStartStep);
         }
         
-        let noteRestsPairs = [];
+        const noteRestsPairs = [];
         for (let i = 0; i < startSteps.length; i++) {
             const startDiff = (i + 1 == startSteps.length ? 32 : startSteps[i + 1]) - startSteps[i];
             const noteRests = [];
@@ -53,35 +58,44 @@ const Hello = (props) => {
             noteRests[1] = rests;
             noteRestsPairs.push(noteRests);
         }
-        
-        let finalNotes = [];
-        for (let i = 0; i < noteRestsPairs.length; i++) {
-            let noteName = Tone.Frequency(combined.notes[i].pitch, 'midi').toNote();
-            noteName = noteName.substring(0, noteName.length - 1) + '/' + noteName[noteName.length - 1];
 
-            const noteObj = new StaveNote({
-                keys: [noteName],
-                duration: noteRestsPairs[i][0],
-            });
-            
-            if (noteName.includes('#')) {
-                noteObj.addAccidental(0, new Accidental("#"));
-            }
+        setMelodyData([combined, noteRestsPairs]);
+    };
 
-            finalNotes.push(noteObj);
-            noteRestsPairs[i][1].forEach((restDuration) => {
-                const restObj = new StaveNote({
-                    keys: ["b/4"],
-                    duration: restDuration + "r",
+    React.useEffect(() => {
+        if (started) {
+            const finalNotes = [];
+            const [combined, noteRestsPairs] = melodyData;
+
+            for (let i = 0; i < noteRestsPairs.length; i++) {
+                const noteName = pitchToNote(combined.notes[i].pitch, keySignature);
+
+                const noteObj = new StaveNote({
+                    keys: [noteName],
+                    duration: noteRestsPairs[i][0],
                 });
-                finalNotes.push(restObj);
-            });
-        }
-        
-        props.updateNotes(finalNotes);
-    }
+                
+                if (noteName.includes('#')) {
+                    noteObj.addAccidental(0, new Accidental("#"));
+                } else if (noteName.includes('b')) {
+                    noteObj.addAccidental(0, new Accidental("b"));
+                }
 
-    return <button onClick={generateMelody}>Generate</button>
+                finalNotes.push(noteObj);
+                noteRestsPairs[i][1].forEach((restDuration) => {
+                    const restObj = new StaveNote({
+                        keys: ["b/4"],
+                        duration: restDuration + "r",
+                    });
+                    finalNotes.push(restObj);
+                });
+            }
+            
+            props.updateNotes(finalNotes);
+        }
+    }, [melodyData, keySignature])
+
+    return <button onClick={generateMelody}>Generate</button>;
 }
 
 export default Hello;
