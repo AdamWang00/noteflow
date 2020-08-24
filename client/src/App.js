@@ -1,10 +1,18 @@
 import React from 'react';
+import 'bootstrap/dist/css/bootstrap.css';
+import 'bootstrap/dist/css/sbstr.css';
+import Jumbotron from 'react-bootstrap/Jumbotron';
+import Button from 'react-bootstrap/Button';
+import InputGroup from 'react-bootstrap/InputGroup';
+import FormControl from 'react-bootstrap/FormControl';
+import 'react-bootstrap';
 import * as Tone from 'tone';
 import './App.css';
 import Hello from './Hello.js';
 import Notes from './Notes';
 import Vex from 'vexflow';
 const {Accidental, StaveNote} = Vex.Flow;
+
 
 const durationToFloat = {
     "1": 4,
@@ -72,13 +80,34 @@ const App = (props) => {
         
 
     return (
+        // <head>
+        //     <style type="text/css">
+        //     #limit {
+        //         max-width: 500px;
+        //     }
+        //     </style>
+        // </head>
         <div className="App">
+            <div style={{display: "inline-block"}}>
+            <Jumbotron>
             <Notes notes={notes} keySignature={key}/>
             <br />
-            Key: <input type="text" onChange={onKeyChanged} />
             <br />
-            <button onClick={() => setPlay(!play)}>{play ? "Pause" : "Play"}</button>
+
+            <div style={{display: "inline-block"}}>
+                <InputGroup className="mb-3">
+                    <InputGroup.Prepend>
+                        <InputGroup.Text id="inputGroup-sizing-default">Key</InputGroup.Text>
+                    </InputGroup.Prepend>
+                    <FormControl type="text" onChange={onKeyChanged} />
+                </InputGroup>
+            </div>
+
+            <br />
+            <Button variant="outline-primary" onClick={() => setPlay(!play)}>{play ? "Pause" : "Play"}</Button>{' '}
             <Hello updateNotes={updateNotes} keySignature={key}/>
+            </Jumbotron>
+            </div>
         </div>
     );
 }

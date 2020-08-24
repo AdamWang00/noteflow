@@ -1,4 +1,8 @@
 import React from 'react';
+import 'bootstrap/dist/css/bootstrap.css';
+import 'bootstrap/dist/css/sbstr.css';
+import Jumbotron from 'react-bootstrap/Jumbotron';
+import Button from 'react-bootstrap/Button';
 import * as mm from "@magenta/music";
 import * as Tone from 'tone';
 import Vex from 'vexflow';
@@ -95,7 +99,7 @@ const Hello = (props) => {
         }
     }, [melodyData, keySignature])
 
-    return <button onClick={generateMelody}>Generate</button>;
+    return <Button variant="outline-success" onClick={generateMelody}>Generate</Button>;
 }
 
 export default Hello;
