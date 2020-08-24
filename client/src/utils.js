@@ -1,9 +1,9 @@
 const defaultNotes = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
 
-const keyMap = {
+const keyPitchesMap = {
+    "C": defaultNotes,
     "G": defaultNotes,
     "D": defaultNotes,
-    "C": defaultNotes,
     "A": defaultNotes,
     "E": defaultNotes,
     "B": defaultNotes,
@@ -18,10 +18,32 @@ const keyMap = {
     "F": ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "Bb", "B"],
 };
 
-const pitchToNote = (pitch, key) => {
-    const noteLetter = keyMap[key][pitch % 12];
+const [n, s, f] = ["n", "#", "b"];
+
+const keyAccidentalsMap = {
+    "C": {"C": n, "D": n, "E": n, "F": n, "G": n, "A": n, "B": n},
+    "G": {"C": n, "D": n, "E": n, "F": s, "G": n, "A": n, "B": n},
+    "D": {"C": s, "D": n, "E": n, "F": s, "G": n, "A": n, "B": n},
+    "A": {"C": s, "D": n, "E": n, "F": s, "G": s, "A": n, "B": n},
+    "E": {"C": s, "D": s, "E": n, "F": s, "G": s, "A": n, "B": n},
+    "B": {"C": s, "D": s, "E": n, "F": s, "G": s, "A": s, "B": n},
+    "F#": {"C": s, "D": s, "E": s, "F": s, "G": s, "A": s, "B": n},
+    "C#": {"C": s, "D": s, "E": s, "F": s, "G": s, "A": s, "B": s},
+    "Cb": {"C": f, "D": f, "E": f, "F": f, "G": f, "A": f, "B": f},
+    "Gb": {"C": f, "D": f, "E": f, "F": n, "G": f, "A": f, "B": f},
+    "Db": {"C": n, "D": f, "E": f, "F": n, "G": f, "A": f, "B": f},
+    "Ab": {"C": n, "D": f, "E": f, "F": n, "G": n, "A": f, "B": f},
+    "Eb": {"C": n, "D": n, "E": f, "F": n, "G": n, "A": f, "B": f},
+    "Bb": {"C": n, "D": n, "E": f, "F": n, "G": n, "A": n, "B": f},
+    "F": {"C": n, "D": n, "E": n, "F": n, "G": n, "A": n, "B": f},
+};
+
+const getNoteFromPitch = (pitch, key) => {
+    const noteLetter = keyPitchesMap[key][pitch % 12];
     const octave = Math.floor(pitch / 12) + (noteLetter === "Cb") - 1;
     return noteLetter + "/" + octave;
 };
 
-export {pitchToNote};
+const getInitialAccidentals = key => keyAccidentalsMap[key];
+
+export { getNoteFromPitch, getInitialAccidentals };

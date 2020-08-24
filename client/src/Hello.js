@@ -2,7 +2,7 @@ import React from 'react';
 import * as mm from "@magenta/music";
 import * as Tone from 'tone';
 import Vex from 'vexflow';
-import { pitchToNote } from './utils.js';
+import { getNoteFromPitch, getInitialAccidentals } from './utils.js';
 const { Accidental, StaveNote } = Vex.Flow;
 // import * as p5 from 'p5';
 // import * as ml5 from 'ml5';
@@ -66,19 +66,27 @@ const Hello = (props) => {
         if (started) {
             const finalNotes = [];
             const [combined, noteRestsPairs] = melodyData;
+            const accidentals = getInitialAccidentals(keySignature); // each is "n", "#", or "b"
 
             for (let i = 0; i < noteRestsPairs.length; i++) {
-                const noteName = pitchToNote(combined.notes[i].pitch, keySignature);
+                const noteName = getNoteFromPitch(combined.notes[i].pitch, keySignature);
 
                 const noteObj = new StaveNote({
                     keys: [noteName],
                     duration: noteRestsPairs[i][0],
                 });
                 
-                if (noteName.includes('#')) {
+                const note = noteName.split("");
+
+                if (note[1] == "#" && accidentals[note[0]] != "#") {
                     noteObj.addAccidental(0, new Accidental("#"));
-                } else if (noteName.includes('b')) {
+                    accidentals[note[0]] = "#";
+                } else if (note[1] == "b" && accidentals[note[0]] != "b") {
                     noteObj.addAccidental(0, new Accidental("b"));
+                    accidentals[note[0]] = "b";
+                } else if (note[1] == "/" && accidentals[note[0]] != "n") {
+                    noteObj.addAccidental(0, new Accidental("n"));
+                    accidentals[note[0]] = "n";
                 }
 
                 finalNotes.push(noteObj);
