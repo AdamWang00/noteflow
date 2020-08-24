@@ -69,9 +69,7 @@ const Notes = (props) => {
 
     return (
         <div ref={outerRef} style={{
-            border: "2px gray solid",
             padding: 10,
-            borderRadius: 10,
             display: "inline-block",
         }}>
         </div>

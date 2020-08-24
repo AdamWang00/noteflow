@@ -4,6 +4,7 @@ import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 import * as Tone from 'tone';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 const synth = new Tone.Synth().toDestination();
 
