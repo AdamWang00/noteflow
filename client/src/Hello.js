@@ -102,7 +102,7 @@ const Hello = (props) => {
             
             updateNotes(finalNotes);
         }
-    }, [melodyData, keySignature, started, updateNotes])
+    }, [melodyData, keySignature])
 
     return <Button variant="outline-success" onClick={generateMelody}>Generate</Button>;
 }
