@@ -3,7 +3,6 @@ import Jumbotron from 'react-bootstrap/Jumbotron';
 import Button from 'react-bootstrap/Button';
 import InputGroup from 'react-bootstrap/InputGroup';
 import FormControl from 'react-bootstrap/FormControl';
-import 'react-bootstrap';
 import * as Tone from 'tone';
 import './App.css';
 import Hello from './Hello.js';
