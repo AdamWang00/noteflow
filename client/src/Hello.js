@@ -16,7 +16,7 @@ const Hello = (props) => {
     const { keySignature, updateNotes } = props;
 
     const [started, setStarted] = React.useState(false);
-    const [melodyData, setMelodyData] = React.useState(null); // [combined, noteRestsPairs]
+    const [melodyData, setMelodyData] = React.useState(null); // [combined, noteRestsPairs] => serialization (optionally with keySignature also)
 
     const generateMelody = async () => {
         await melodyRnnLoaded;
@@ -31,7 +31,7 @@ const Hello = (props) => {
             quantizationInfo: { stepsPerQuarter: 4}
         };
         const steps = 28;
-        const temperature = 1.2;
+        const temperature = 1.5;
 
         const result = await melodyRnn.continueSequence(seed, steps, temperature);
         const combined = mm.sequences.concatenate([seed, result]);
