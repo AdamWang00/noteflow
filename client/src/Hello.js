@@ -13,7 +13,7 @@ const melodyRnnLoaded = melodyRnn.initialize();
 
 const Hello = (props) => {
 
-    const { keySignature } = props;
+    const { keySignature, updateNotes } = props;
 
     const [started, setStarted] = React.useState(false);
     const [melodyData, setMelodyData] = React.useState(null); // [combined, noteRestsPairs]
@@ -43,7 +43,7 @@ const Hello = (props) => {
         
         const noteRestsPairs = [];
         for (let i = 0; i < startSteps.length; i++) {
-            const startDiff = (i + 1 == startSteps.length ? 32 : startSteps[i + 1]) - startSteps[i];
+            const startDiff = (i + 1 === startSteps.length ? 32 : startSteps[i + 1]) - startSteps[i];
             const noteRests = [];
             const noteDuration = Math.pow(2, Math.floor(Math.log(startDiff) / Math.log(2)));
             noteRests[0] = (16 / noteDuration).toString();
@@ -79,13 +79,13 @@ const Hello = (props) => {
                 
                 const note = noteName.split("");
 
-                if (note[1] == "#" && accidentals[note[0]] != "#") {
+                if (note[1] === "#" && accidentals[note[0]] !== "#") {
                     noteObj.addAccidental(0, new Accidental("#"));
                     accidentals[note[0]] = "#";
-                } else if (note[1] == "b" && accidentals[note[0]] != "b") {
+                } else if (note[1] === "b" && accidentals[note[0]] !== "b") {
                     noteObj.addAccidental(0, new Accidental("b"));
                     accidentals[note[0]] = "b";
-                } else if (note[1] == "/" && accidentals[note[0]] != "n") {
+                } else if (note[1] === "/" && accidentals[note[0]] !== "n") {
                     noteObj.addAccidental(0, new Accidental("n"));
                     accidentals[note[0]] = "n";
                 }
@@ -100,9 +100,9 @@ const Hello = (props) => {
                 });
             }
             
-            props.updateNotes(finalNotes);
+            updateNotes(finalNotes);
         }
-    }, [melodyData, keySignature])
+    }, [melodyData, keySignature, started, updateNotes])
 
     return <Button variant="outline-success" onClick={generateMelody}>Generate</Button>;
 }

@@ -3,12 +3,12 @@ import Jumbotron from 'react-bootstrap/Jumbotron';
 import Button from 'react-bootstrap/Button';
 import InputGroup from 'react-bootstrap/InputGroup';
 import FormControl from 'react-bootstrap/FormControl';
-import * as Tone from 'tone';
 import './App.css';
 import Hello from './Hello.js';
 import Notes from './Notes';
 import Vex from 'vexflow';
-const {Accidental, StaveNote} = Vex.Flow;
+// import * as Tone from 'tone';
+const { StaveNote } = Vex.Flow;
 
 
 const durationToFloat = {
@@ -73,7 +73,7 @@ const App = (props) => {
 
             return () => clearInterval(interval);
         }
-    }, [play, notes, qpm, index]);
+    }, [play, notes, qpm, index, synth]);
         
 
     return (
