@@ -78,7 +78,6 @@ const Hello = (props) => {
                 });
                 
                 const note = noteName.split("");
-
                 if (note[1] === "#" && accidentals[note[0]] !== "#") {
                     noteObj.addAccidental(0, new Accidental("#"));
                     accidentals[note[0]] = "#";

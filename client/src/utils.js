@@ -44,6 +44,6 @@ const getNoteFromPitch = (pitch, key) => {
     return noteLetter + "/" + octave;
 };
 
-const getInitialAccidentals = key => keyAccidentalsMap[key];
+const getInitialAccidentals = key => JSON.parse(JSON.stringify(keyAccidentalsMap[key]));
 
 export { getNoteFromPitch, getInitialAccidentals };
