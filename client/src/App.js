@@ -1,6 +1,4 @@
 import React from 'react';
-import 'bootstrap/dist/css/bootstrap.css';
-import 'bootstrap/dist/css/sbstr.css';
 import Jumbotron from 'react-bootstrap/Jumbotron';
 import Button from 'react-bootstrap/Button';
 import InputGroup from 'react-bootstrap/InputGroup';
@@ -80,13 +78,6 @@ const App = (props) => {
         
 
     return (
-        // <head>
-        //     <style type="text/css">
-        //     #limit {
-        //         max-width: 500px;
-        //     }
-        //     </style>
-        // </head>
         <div className="App">
             <div style={{display: "inline-block"}}>
             <Jumbotron>
