@@ -4,10 +4,12 @@
   "private": true,
   "dependencies": {
     "@magenta/music": "^1.19.0",
+    "@react-firebase/auth": "^0.2.10",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
     "bootstrap": "^4.5.2",
+    "firebase": "^7.19.1",
     "ml5": "^0.5.0",
     "p5": "^1.1.9",
     "react": "^16.13.1",
