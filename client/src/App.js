@@ -8,6 +8,8 @@ import Hello from './Hello.js';
 import Notes from './Notes';
 import Vex from 'vexflow';
 import * as Tone from 'tone';
+import { CookiesProvider } from 'react-cookie';
+import { useCookies } from 'react-cookie';
 const { StaveNote } = Vex.Flow;
 
 
@@ -27,6 +29,8 @@ const durationToFloat = {
 };
 
 const App = (props) => {
+    const [cookies, setCookie] = useCookies(["token"]);
+    setCookie("token","joe");
     const synth = props.synth;
     const validKeys = ["C","G","D","A","E","B","F#","C#","Cb","Gb","Db","Ab","Eb","Bb","F"];
 
@@ -180,11 +184,13 @@ const App = (props) => {
     // }, [play, notes, qpm, index, synth]);
 
     return (
-        <div className="App">
-            <div style={{display: "inline-block"}}>
-                {render()}
+        <CookiesProvider>
+            <div className="App">
+                <div style={{display: "inline-block"}}>
+                    {render()}
+                </div>
             </div>
-        </div>
+        </CookiesProvider>
     );
 }
 
