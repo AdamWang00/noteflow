@@ -1,17 +1,24 @@
-import os
-import secrets
-from flask import url_for, current_app
-from flask_mail import Message
-from api import mail
+from flask import current_app
+from api.models import User
+import jwt
 
+def auth_user(token):
+    try:
+        print(token)
+        token_data = jwt.decode(token, current_app.config['SECRET_KEY'])
+    except:
+        print("[AUTH ERROR] 1")
+        return None
 
-def send_reset_email(user):
-	token = user.get_reset_token()
-	msg = Message('Password Reset Request', sender='noreply10665@gmail.com', recipients=[user.email])
-	msg.body = f'''To reset your password, go to the following link:
-{url_for('users.reset_token', token=token, _external=True)}
+    name = token_data.get('name')
+    password = token_data.get('password')
+    if name is None or password is None:
+        print("[AUTH ERROR] 2")
+        return None
 
-If you did not make this password reset request, ignore this email.
-'''
-	mail.send(msg)
+    user = User.query.filter_by(name=name).first()
+    if user and user.verify_password(password):
+        return user
 
+    print("[AUTH ERROR] 3")
+    return None

@@ -1,38 +1,84 @@
-import os
-from flask import jsonify, current_app, abort, Blueprint
-from flask_login import current_user, login_required
+from flask import jsonify, request, Blueprint
 from api import db
 from api.models import Post
-from api.posts.forms import PostForm
+from api.users.utils import auth_user
 
 
 posts = Blueprint('posts', __name__)
 
 
 @posts.route("/post/new", methods=['POST'])
-@login_required
 def new_post():
-	form = PostForm()
-	if form.validate_on_submit():
-		post = Post(title=form.title.data, content=form.content.data, melody_data=form.melody_data.data, author=current_user)
-		db.session.add(post)
-		db.session.commit()
-	return jsonify(success=True)
+	token = request.json.get('token')
+	if not token:
+		return jsonify(error="Missing token")
+
+	user = auth_user(token)
+	if not user:
+		return jsonify(error="Invalid token")
+
+	title = request.json.get('title')
+	melody_data = request.json.get('melody_data')
+	if title == None or melody_data == None:
+		return jsonify(error="Missing title/melody_data")
+
+	post = Post(title=title, melody_data=melody_data, author=user)
+	db.session.add(post)
+	db.session.commit()
+
+	return jsonify(post={
+		"id":post.id,
+		"title":post.title,
+		"melody_data":post.melody_data,
+		"author":post.author.name,
+		"date":post.date_posted.strftime('%m-%d-%Y'),
+	})
 
 
-@posts.route("/post/<int:post_id>")
+@posts.route("/post/<int:post_id>", methods=['GET'])
 def post(post_id):
-	post = Post.query.get_or_404(post_id)
-	return jsonify(post)
+	post = Post.query.get(post_id)
+	if not post:
+		return jsonify(error="Post not found")
+
+	return jsonify(post={
+		"id":post.id,
+		"title":post.title,
+		"melody_data":post.melody_data,
+		"author":post.author.name,
+		"date":post.date_posted.strftime('%m-%d-%Y'),
+	})
 
 
 @posts.route("/post/<int:post_id>/delete", methods=['POST'])
-@login_required
 def delete_post(post_id):
-	post = Post.query.get_or_404(post_id)
-	if post.author != current_user:
-		abort(403)
+	token = request.json.get('token')
+	if not token:
+		return jsonify(error="Missing token")
+
+	post = Post.query.get(post_id)
+	if not post:
+		return jsonify(error="Post not found")
+
+	user = auth_user(token)
+	if not user or post.author != auth_user(token):
+		return jsonify(error="Permission denied")
+
 	db.session.delete(post)
 	db.session.commit()
+
 	return jsonify(success=True)
 
+
+@posts.route("/posts", methods=['GET'])
+def recent_posts():
+	posts = Post.query.order_by(Post.date_posted.desc()).limit(5).all()
+	f = lambda post: {
+		"id":post.id,
+		"title":post.title,
+		"melody_data":post.melody_data,
+		"author":post.author.name,
+		"date":post.date_posted.strftime('%m-%d-%Y'),
+	}
+	
+	return jsonify(posts=list(map(f, posts)))
