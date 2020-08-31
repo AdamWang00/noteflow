@@ -355,16 +355,15 @@ const App = (props) => {
     }, [melodyData, keySignature])
 
     const render = () => {
-        if (!started) return <Jumbotron>
-            <h1>welcome to noteflow</h1>
-            <br />
-            <Button onClick={onStart}>Start</Button>
-            </Jumbotron>;
+        if (!started) return <div className="jumbo">
+                <h1 className="startHeader">Welcome to <span className="noteflow">noteflow</span></h1>
+                <br />
+                <button className="startButton" onClick={onStart}>Start</button>
+            </div>;
         return (
-            <Jumbotron>
-                <h1>noteflow</h1>
+            <div className="jumbo">
+                <h1>{auth!==null && auth + "'s "}noteflow</h1>
                 <br></br>
-                {auth!==null && auth}
                 <Button variant="outline-secondary" onClick={onLoginLogoutButton}>{auth===null ? "Login" : "Logout"}</Button>{' '}
                 {auth===null && <Button variant="outline-primary" onClick={onRegisterButton}>Register</Button>}
                 <br />
@@ -430,7 +429,7 @@ const App = (props) => {
 
                 <Modal show={registerModal} onHide={clearRegister}>
                     <Modal.Header closeButton>
-                        <Modal.Title>Create a NoteFlow account</Modal.Title>
+                        <Modal.Title>Create a noteflow account</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
                         {registerMessage}
@@ -479,7 +478,7 @@ const App = (props) => {
                         </Button>
                     </Modal.Footer>
                 </Modal>
-            </Jumbotron>
+            </div>
         );
     }
 

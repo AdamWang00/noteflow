@@ -1,3 +1,13 @@
 .MelodyList {
-    padding: 20px;
+    padding: 40px 20px 10px 20px;
+}
+
+.loadButton {
+    padding: 4px;
+    margin: 6px;
+}
+
+.deleteButton {
+    padding: 4px;
+    margin: 6px;
 }
