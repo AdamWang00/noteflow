@@ -19,6 +19,7 @@ import { getNoteFromPitch, getInitialAccidentals } from './utils.js';
 
 const { Accidental, StaveNote } = Vex.Flow;
 
+
 const durationToFloat = {
     "1": 4,
     "2": 2,
@@ -355,16 +356,20 @@ const App = (props) => {
 
     const render = () => {
         if (!started) return <Jumbotron>
-            <h1>Welcome to NoteFlow</h1>
+            <h1>welcome to noteflow</h1>
             <br />
             <Button onClick={onStart}>Start</Button>
             </Jumbotron>;
         return (
             <Jumbotron>
+                <h1>noteflow</h1>
+                <br></br>
                 {auth!==null && auth}
-                <Button variant="outline-secondary" onClick={onLoginLogoutButton}>{auth===null ? "Login" : "Logout"}</Button>
+                <Button variant="outline-secondary" onClick={onLoginLogoutButton}>{auth===null ? "Login" : "Logout"}</Button>{' '}
                 {auth===null && <Button variant="outline-primary" onClick={onRegisterButton}>Register</Button>}
                 <br />
+                <br />
+                <hr/>
                 <br />
                 <h3>{title || "New Melody"}</h3>
                 <Notes notes={notes} keySignature={keySignature}/>
@@ -377,7 +382,7 @@ const App = (props) => {
                         </InputGroup.Prepend>
                         <FormControl placeholder={keySignature} type="text" onChange={onKeyChanged}/>
                     </InputGroup>
-                </div>
+                </div> {' '}
 
                 <div style={{display: "inline-block"}}>
                     <InputGroup className="mb-3">
@@ -389,14 +394,14 @@ const App = (props) => {
                 </div>
 
                 <br />
-                <Button variant="outline-primary" onClick={onPlayPause}>{play ? "Stop" : "Play"}</Button>
-                <Generator melodyRnn={melodyRnn} updateNotes={updateNotes} keySignature={keySignature}/>
+                <Button variant="outline-primary" onClick={onPlayPause}>{play ? "Stop" : "Play"}</Button>{' '}
+                <Generator melodyRnn={melodyRnn} updateNotes={updateNotes} keySignature={keySignature}/>{' '}
                 <Button variant={auth===null ? "outline-secondary" : "outline-primary"} onClick={auth===null ? onLoginLogoutButton : onSaveButton}>{auth===null ? "Login to save melody" : "Save melody"}</Button>
                 { auth!==null && <MelodyList update={melodyListKey} name={auth} onLoadMelody={onLoadMelody} onDeleteMelody={onDeleteMelody} /> }
 
                 <Modal show={loginModal} onHide={clearLogin}>
                     <Modal.Header closeButton>
-                        <Modal.Title>Login to NoteFlow</Modal.Title>
+                        <Modal.Title>Login to noteflow</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
                         {loginMessage}
