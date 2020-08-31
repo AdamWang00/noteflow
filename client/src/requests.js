@@ -1,5 +1,5 @@
 import axios from "axios"
-import json from "json"
+import JSON from "json"
 const url = "https://localhost:5000"
 
 const post = (path, data) => {
