@@ -139,9 +139,8 @@ const App = (props) => {
     };
 
     const testEndpoint = async () => {
-        let id = 3
-        const res = await Requests.allPosts(id)
-        console.log(res)
+        const { data } = await Requests.allPosts(3)
+        console.log(data)
     }
 
     const render = () => {

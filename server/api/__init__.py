@@ -20,4 +20,9 @@ def create_app(config_class=Config):
 	app.register_blueprint(posts)
 	app.register_blueprint(main)
 
+	@app.after_request
+	def apply_caching(response):
+	    response.headers['Access-Control-Allow-Origin'] = '*'
+	    return response
+
 	return app
