@@ -102,6 +102,10 @@ const App = (props) => {
     const [saveTitle, setSaveTitle] = React.useState(null);
     const [saveMessage, setSaveMessage] = React.useState(null);
 
+    const [loadModal, setLoadModal] = React.useState(false);
+    const [loadID, setLoadID] = React.useState(null);
+    const [loadMessage, setLoadMessage] = React.useState(null);
+
     const synth = props.synth;
     const validKeys = ["C","G","D","A","E","B","F#","C#","Cb","Gb","Db","Ab","Eb","Bb","F"];
 
@@ -296,6 +300,27 @@ const App = (props) => {
         setSaveMessage(null);
     };
 
+    const clearLoad = () => {
+        setLoadTitle(null);
+        setLoadModal(false);
+        setLoadMessage(null);
+    }
+
+    const onLoad = async () => {
+        if (!loadID) {
+            setLoadID("Enter the id of a melody that you want to load");
+            return;
+        }
+
+        const name = await checkAuth();
+        if (name === null) {
+            setAuth(null);
+        } else {
+            const data = await Requests.newMelody(loadID);
+            onLoadMelody(data.melodyData);
+        }
+    }
+
     const updateNotes = newMelodyData => {
        setMelodyData(newMelodyData);
        setTitle("");
@@ -471,6 +496,29 @@ const App = (props) => {
                         </Button>
                         <Button variant="primary" onClick={onSave}>
                             Save
+                        </Button>
+                    </Modal.Footer>
+                </Modal>
+
+                <Modal show={loadModal} onHide={clearLoad}>
+                    <Modal.Header closeButton>
+                        <Modal.Title>Load a melody</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        {loadMessage}
+                        <InputGroup className="m-2">
+                            <InputGroup.Prepend>
+                                <InputGroup.Text id="inputGroup-sizing-default">Melody ID</InputGroup.Text>
+                            </InputGroup.Prepend>
+                            <FormControl type="text" onChange={e => setLoadID(e.target.value)}/>
+                        </InputGroup>
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <Button variant="secondary" onClick={clearLoad}>
+                            Cancel
+                        </Button>
+                        <Button variant="primary" onClick={onLoad}>
+                            Load Melody
                         </Button>
                     </Modal.Footer>
                 </Modal>
