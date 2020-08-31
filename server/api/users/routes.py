@@ -12,6 +12,8 @@ users = Blueprint('users', __name__)
 def register():
 	name = request.json.get('name')
 	password = request.json.get('password')
+	if not name or not password:
+		return jsonify(error="Missing name/password")
 
 	user = User.query.filter_by(name=name).first()
 	if user:
@@ -31,7 +33,7 @@ def register():
 def login():
 	name = request.json.get('name')
 	password = request.json.get('password')
-	if name is None or password is None:
+	if not name or not password:
 		return jsonify(error="Missing name/password")
 
 	user = User.query.filter_by(name=name).first()
