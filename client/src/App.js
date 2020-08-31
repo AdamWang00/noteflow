@@ -31,7 +31,8 @@ const durationToFloat = {
 
 const App = (props) => {
     const [cookies, setCookie] = useCookies(["token"]);
-    setCookie("token","joe");
+    const [auth, setAuth] = React.useState()
+
     const synth = props.synth;
     const validKeys = ["C","G","D","A","E","B","F#","C#","Cb","Gb","Db","Ab","Eb","Bb","F"];
 
@@ -138,18 +139,24 @@ const App = (props) => {
         clearTimeouts();
     };
 
-    const testEndpoint = async () => {
-        const { data } = await Requests.allPosts(3)
+    const checkAuth = async () => {
+        const token = cookies["token"];
+        console.log(token)
+        const { data } = await Requests.account(token);
         console.log(data)
     }
 
+    checkAuth()
+
     const render = () => {
         if (!started) return <Jumbotron>
+            <h1>Welcome to NoteFlow</h1>
+            <br />
             <Button onClick={onStart}>Start</Button>
-            <Button onClick={testEndpoint}>test</Button>
             </Jumbotron>;
         return (
             <Jumbotron>
+                <Button variant="outline-primary" onClick={onPlayPause}>{play ? "Stop" : "Play"}</Button>
                 <Notes notes={notes} keySignature={key}/>
                 <br />
 
