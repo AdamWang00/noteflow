@@ -1,6 +1,7 @@
 import axios from "axios"
-import JSON from "json"
-const url = "https://localhost:5000"
+
+const url = "http://localhost:5000"
+
 
 const post = (path, data) => {
     return axios.post(url + path, data, {
@@ -62,7 +63,8 @@ const deletePost = (id, token) => {
     return post('/post/' + id + '/delete', data)
 }
 
-const posts = () => {
+const allPosts = () => {
     return get('/posts')
 }
-export { register, login, account, user, newMelody, getPost, deletePost, posts};
+
+export { register, login, account, user, newMelody, getPost, deletePost, allPosts };

@@ -137,15 +137,17 @@ const App = (props) => {
 
         clearTimeouts();
     };
-    const testendpoint = async () => {
+
+    const testEndpoint = async () => {
         let id = 3
-        const res = await Requests.getPost(id)
+        const res = await Requests.allPosts(id)
         console.log(res)
     }
+
     const render = () => {
         if (!started) return <Jumbotron>
             <Button onClick={onStart}>Start</Button>
-            <Button onClick={testendpoint}>testLogin</Button>
+            <Button onClick={testEndpoint}>test</Button>
             </Jumbotron>;
         return (
             <Jumbotron>
