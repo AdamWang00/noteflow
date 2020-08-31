@@ -5,13 +5,14 @@ import InputGroup from 'react-bootstrap/InputGroup';
 import FormControl from 'react-bootstrap/FormControl';
 import './App.css';
 import Hello from './Hello.js';
+import * as Requests from './requests.js'
 import Notes from './Notes';
 import Vex from 'vexflow';
 import * as Tone from 'tone';
 import { CookiesProvider } from 'react-cookie';
 import { useCookies } from 'react-cookie';
+import { logging } from '@magenta/music';
 const { StaveNote } = Vex.Flow;
-
 
 const durationToFloat = {
     "1": 4,
@@ -136,9 +137,16 @@ const App = (props) => {
 
         clearTimeouts();
     };
-
+    const testendpoint = async () => {
+        let id = 3
+        const res = await Requests.getPost(id)
+        console.log(res)
+    }
     const render = () => {
-        if (!started) return <Jumbotron><Button onClick={onStart}>Start</Button></Jumbotron>;
+        if (!started) return <Jumbotron>
+            <Button onClick={onStart}>Start</Button>
+            <Button onClick={testendpoint}>testLogin</Button>
+            </Jumbotron>;
         return (
             <Jumbotron>
                 <Notes notes={notes} keySignature={key}/>

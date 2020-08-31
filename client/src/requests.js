@@ -42,7 +42,7 @@ const user = (name) => {
     return get('/user/' + name)
 }
 
-const newmelody = (token, title, melody_data) => {
+const newMelody = (token, title, melody_data) => {
     let data = JSON.stringify({
         token: token,
         title: title,
@@ -51,11 +51,11 @@ const newmelody = (token, title, melody_data) => {
     return post('/post/new', data)
 }
 
-const getpost = (id) => {
+const getPost = (id) => {
     return get('/post/' + id)
 }
 
-const deletepost = (id, token) => {
+const deletePost = (id, token) => {
     let data = JSON.stringify({
         token: token
     })
@@ -65,3 +65,4 @@ const deletepost = (id, token) => {
 const posts = () => {
     return get('/posts')
 }
+export { register, login, account, user, newMelody, getPost, deletePost, posts};
