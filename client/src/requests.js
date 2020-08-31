@@ -56,7 +56,7 @@ const getPost = (id) => {
     return get('/post/' + id)
 }
 
-const deletePost = (id, token) => {
+const deletePost = (token, id) => {
     let data = JSON.stringify({
         token: token
     })
