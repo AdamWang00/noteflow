@@ -3,6 +3,8 @@ import Jumbotron from 'react-bootstrap/Jumbotron';
 import Button from 'react-bootstrap/Button';
 import InputGroup from 'react-bootstrap/InputGroup';
 import FormControl from 'react-bootstrap/FormControl';
+import Modal from 'react-bootstrap/Modal';
+
 import './App.css';
 import Generator from './Generator.js';
 import MelodyList from './MelodyList.js'
@@ -84,6 +86,21 @@ const melodyRnnLoaded = melodyRnn.initialize();
 const App = (props) => {
     const [cookies, setCookie, removeCookie] = useCookies(["token"]);
     const [auth, setAuth] = React.useState(null);
+    const [melodyListKey, setMelodyListKey] = React.useState(1); // use to force-update melody list
+
+    const [loginModal, setLoginModal] = React.useState(false);
+    const [loginName, setLoginName] = React.useState(null);
+    const [loginPassword, setLoginPassword] = React.useState(null);
+    const [loginMessage, setLoginMessage] = React.useState(null);
+
+    const [registerModal, setRegisterModal] = React.useState(false);
+    const [registerName, setRegisterName] = React.useState(null);
+    const [registerPassword, setRegisterPassword] = React.useState(null);
+    const [registerMessage, setRegisterMessage] = React.useState(null);
+
+    const [saveModal, setSaveModal] = React.useState(false);
+    const [saveTitle, setSaveTitle] = React.useState(null);
+    const [saveMessage, setSaveMessage] = React.useState(null);
 
     const synth = props.synth;
     const validKeys = ["C","G","D","A","E","B","F#","C#","Cb","Gb","Db","Ab","Eb","Bb","F"];
@@ -94,6 +111,7 @@ const App = (props) => {
     const [play, setPlay] = React.useState(false);
     const [index, setIndex] = React.useState(0);
 
+    const [title, setTitle] = React.useState("");
     const [qpm, setQpm] = React.useState(120);
     const [keySignature, setKeySignature] = React.useState("C");
     const [melodyData, setMelodyData] = React.useState(defaultMelodyData);
@@ -111,6 +129,11 @@ const App = (props) => {
         let value = e.target.value || "C";
         value = value.charAt(0).toUpperCase() + value.substring(1);
         if (validKeys.includes(value)) setKeySignature(value);
+    };
+
+    const onQPMChanged = e => {
+        let value = Number(e.target.value) || "120";
+        if (value > 0) setQpm(value);
     };
 
     const onPlayPause = async () => {
@@ -147,21 +170,8 @@ const App = (props) => {
         }
     };
 
-    const onSave = async () => {
-        if (auth===null) {
-            return;
-        }
-
-        const token = cookies["token"];
-        const name = await checkAuth();
-        if (name===null) {
-            setAuth(null)
-        } else {
-            await Requests.newMelody(token, "melody 1", {"qpm": qpm, "keySignature": keySignature, "melody": melodyData});
-        }
-    };
-
     const onLoadMelody = data => {
+        setTitle(data.title || "New Melody");
         setQpm(data.qpm || 120);
         setKeySignature(data.keySignature || "C");
         setMelodyData(data.melody || defaultMelodyData);
@@ -175,40 +185,89 @@ const App = (props) => {
         const token = cookies["token"];
         const name = await checkAuth();
         if (name===null) {
-            setAuth(null)
+            setAuth(null);
         } else {
             await Requests.deletePost(token, melodyId);
+            setMelodyListKey(melodyListKey + 1);
         }
     };
 
-    const onLoginLogout = async () => {
+    const onLoginLogoutButton = () => {
         if (auth===null) {
-            const { data } = await Requests.login("jane", "123");
-            if (data["error"]) {
-                console.log("invalid credentials, please try again")
-            } else {
-                const token = data["token"];
-                setCookie("token", token);
-                const name = await checkAuth(token);
-                setAuth(name);
-            }
+            setLoginModal(true);
         } else {
             removeCookie("token");
             setAuth(null);
         }
     };
 
-    const onRegister = async () => {
-        const { data } = await Requests.register("jane", "123");
+    const onLogin = async () => {
+        if (!loginName || !loginPassword) {
+            setLoginMessage("Missing name or password");
+            return;
+        }
+
+        const { data } = await Requests.login(loginName, loginPassword);
         if (data["error"]) {
-            console.log("invalid credentials, please try again")
+            setLoginMessage(data["error"]);
         } else {
+            clearLogin()
             const token = data["token"];
             setCookie("token", token);
             const name = await checkAuth(token);
             setAuth(name);
         }
+    }
+
+    const onRegisterButton = () => {
+        setRegisterModal(true);
     };
+
+    const onRegister = async () => {
+        if (!registerName || !registerPassword) {
+            setRegisterMessage("Missing name or password");
+            return;
+        }
+
+        const { data } = await Requests.register(registerName, registerPassword);
+        if (data["error"]) {
+            setRegisterMessage(data["error"]);
+        } else {
+            clearRegister();
+            const token = data["token"];
+            setCookie("token", token);
+            const name = await checkAuth(token);
+            setAuth(name);
+        }
+    }
+
+    const onSaveButton = async () => {
+        const token = cookies["token"];
+        const name = await checkAuth();
+        if (name===null) {
+            setAuth(null);
+        } else {
+            setSaveModal(true);
+        }
+    };
+
+    const onSave = async () => {
+        if (!saveTitle) {
+            setSaveMessage("Enter a title for your melody");
+            return;
+        }
+
+        const token = cookies["token"];
+        const name = await checkAuth();
+        if (name===null) {
+            setAuth(null);
+        } else {
+            await Requests.newMelody(token, saveTitle, {"title": saveTitle, "qpm": qpm, "keySignature": keySignature, "melody": melodyData});
+            setTitle(saveTitle);
+            clearSave();
+            setMelodyListKey(melodyListKey + 1);
+        }
+    }
 
     const clearTimeouts = () => {
         timeouts.current.forEach(timeout => {
@@ -217,8 +276,29 @@ const App = (props) => {
         timeouts.current = [];
     };
 
+    const clearLogin = () => {
+        setLoginName(null);
+        setLoginPassword(null);
+        setLoginModal(false);
+        setLoginMessage(null);
+    };
+
+    const clearRegister = () => {
+        setRegisterName(null);
+        setRegisterPassword(null);
+        setRegisterModal(false);
+        setRegisterMessage(null);
+    };
+
+    const clearSave = () => {
+        setSaveTitle(null);
+        setSaveModal(false);
+        setSaveMessage(null);
+    };
+
     const updateNotes = newMelodyData => {
        setMelodyData(newMelodyData);
+       setTitle("");
     };
 
     const checkAuth = async (optionalToken) => {
@@ -282,10 +362,11 @@ const App = (props) => {
         return (
             <Jumbotron>
                 {auth!==null && auth}
-                <Button variant="outline-secondary" onClick={onLoginLogout}>{auth===null ? "Login" : "Logout"}</Button>
-                {auth===null && <Button variant="outline-primary" onClick={onRegister}>Register</Button>}
+                <Button variant="outline-secondary" onClick={onLoginLogoutButton}>{auth===null ? "Login" : "Logout"}</Button>
+                {auth===null && <Button variant="outline-primary" onClick={onRegisterButton}>Register</Button>}
                 <br />
                 <br />
+                <h3>{title || "New Melody"}</h3>
                 <Notes notes={notes} keySignature={keySignature}/>
                 <br />
 
@@ -294,15 +375,105 @@ const App = (props) => {
                         <InputGroup.Prepend>
                             <InputGroup.Text id="inputGroup-sizing-default">Key</InputGroup.Text>
                         </InputGroup.Prepend>
-                        <FormControl type="text" onChange={onKeyChanged}/>
+                        <FormControl placeholder={keySignature} type="text" onChange={onKeyChanged}/>
+                    </InputGroup>
+                </div>
+
+                <div style={{display: "inline-block"}}>
+                    <InputGroup className="mb-3">
+                        <InputGroup.Prepend>
+                            <InputGroup.Text id="inputGroup-sizing-default">QPM</InputGroup.Text>
+                        </InputGroup.Prepend>
+                        <FormControl placeholder={qpm} type="text" onChange={onQPMChanged}/>
                     </InputGroup>
                 </div>
 
                 <br />
                 <Button variant="outline-primary" onClick={onPlayPause}>{play ? "Stop" : "Play"}</Button>
                 <Generator melodyRnn={melodyRnn} updateNotes={updateNotes} keySignature={keySignature}/>
-                <Button variant={auth===null ? "outline-secondary" : "outline-primary"} onClick={onSave}>{auth===null ? "Login to save melody" : "Save melody"}</Button>
-                { auth!==null && <MelodyList name={auth} onLoadMelody={onLoadMelody} onDeleteMelody={onDeleteMelody} /> }
+                <Button variant={auth===null ? "outline-secondary" : "outline-primary"} onClick={auth===null ? onLoginLogoutButton : onSaveButton}>{auth===null ? "Login to save melody" : "Save melody"}</Button>
+                { auth!==null && <MelodyList update={melodyListKey} name={auth} onLoadMelody={onLoadMelody} onDeleteMelody={onDeleteMelody} /> }
+
+                <Modal show={loginModal} onHide={clearLogin}>
+                    <Modal.Header closeButton>
+                        <Modal.Title>Login to NoteFlow</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        {loginMessage}
+                        <InputGroup className="m-2">
+                            <InputGroup.Prepend>
+                                <InputGroup.Text id="inputGroup-sizing-default">Name</InputGroup.Text>
+                            </InputGroup.Prepend>
+                            <FormControl type="text" onChange={e => setLoginName(e.target.value)}/>
+                        </InputGroup>
+                        <InputGroup className="m-2">
+                            <InputGroup.Prepend>
+                                <InputGroup.Text id="inputGroup-sizing-default">Password</InputGroup.Text>
+                            </InputGroup.Prepend>
+                            <FormControl type="password" onChange={e => setLoginPassword(e.target.value)}/>
+                        </InputGroup>
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <Button variant="secondary" onClick={clearLogin}>
+                            Cancel
+                        </Button>
+                        <Button variant="primary" onClick={onLogin}>
+                            Login
+                        </Button>
+                    </Modal.Footer>
+                </Modal>
+
+                <Modal show={registerModal} onHide={clearRegister}>
+                    <Modal.Header closeButton>
+                        <Modal.Title>Create a NoteFlow account</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        {registerMessage}
+                        <InputGroup className="m-2">
+                            <InputGroup.Prepend>
+                                <InputGroup.Text id="inputGroup-sizing-default">Name</InputGroup.Text>
+                            </InputGroup.Prepend>
+                            <FormControl type="text" onChange={e => setRegisterName(e.target.value)}/>
+                        </InputGroup>
+                        <InputGroup className="m-2">
+                            <InputGroup.Prepend>
+                                <InputGroup.Text id="inputGroup-sizing-default">Password</InputGroup.Text>
+                            </InputGroup.Prepend>
+                            <FormControl type="password" onChange={e => setRegisterPassword(e.target.value)}/>
+                        </InputGroup>
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <Button variant="secondary" onClick={clearRegister}>
+                            Cancel
+                        </Button>
+                        <Button variant="primary" onClick={onRegister}>
+                            Register
+                        </Button>
+                    </Modal.Footer>
+                </Modal>
+
+                <Modal show={saveModal} onHide={clearSave}>
+                    <Modal.Header closeButton>
+                        <Modal.Title>Save your melody</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        {saveMessage}
+                        <InputGroup className="m-2">
+                            <InputGroup.Prepend>
+                                <InputGroup.Text id="inputGroup-sizing-default">Melody Title</InputGroup.Text>
+                            </InputGroup.Prepend>
+                            <FormControl type="text" onChange={e => setSaveTitle(e.target.value)}/>
+                        </InputGroup>
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <Button variant="secondary" onClick={clearSave}>
+                            Cancel
+                        </Button>
+                        <Button variant="primary" onClick={onSave}>
+                            Save
+                        </Button>
+                    </Modal.Footer>
+                </Modal>
             </Jumbotron>
         );
     }

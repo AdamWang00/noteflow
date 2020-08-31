@@ -3,7 +3,7 @@ import * as Requests from './requests.js'
 import './MelodyList.css'
 
 const MelodyList = (props) => {
-    const { name, onLoadMelody, onDeleteMelody } = props;
+    const { update, name, onLoadMelody, onDeleteMelody } = props;
     const [melodies, setMelodies] = React.useState(null);
 
     const getMelodies = async () => {
@@ -29,7 +29,7 @@ const MelodyList = (props) => {
 
     React.useEffect(() => {
         getMelodies();
-    }, [name])
+    }, [name, update])
 
     if (melodies!==null) {
         return (
