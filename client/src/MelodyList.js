@@ -1,6 +1,7 @@
 import React from 'react'
 import * as Requests from './requests.js'
 import './MelodyList.css'
+import Button from 'react-bootstrap/Button';
 
 const MelodyList = (props) => {
     const { update, name, onLoadMelody, onDeleteMelody } = props;
@@ -20,9 +21,11 @@ const MelodyList = (props) => {
     const renderMelody = (melody) => {
         return (
             <div key={melody.id}>
-                {melody.title + " " + melody.date}
-                <button onClick={() => onLoadMelody(melody.melody_data)}>Load</button>
-                <button onClick={() => onDeleteMelody(melody.id)}>Delete</button>
+                {melody.title + " " + melody.date + "  "}
+                {/* <Button variant="outline-primary onClick={() => onLoadMelody(melody.melody_data)}>Load</Button>{' '}
+                <Button variant="outline-error onClick={() => onDeleteMelody(melody.id)}>Delete</Button> */}
+                <Button variant="outline-primary" onClick={onLoadMelody(melody.melody_data)}>Load</Button>{' '}
+                <Button variant="outline-danger" onClick={onDeleteMelody(melody.id)}>Delete</Button>
             </div>
         )
     }
