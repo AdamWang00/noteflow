@@ -10,9 +10,12 @@ const Generator = (props) => {
     const { melodyRnn, updateNotes } = props;
 
     const generateMelody = async () => {
+        let random_note = Math.floor(Math.random() * 12) + 1;
+        let freq = 2 ** (random_note / 12) * 330;
+        let midi_note = Tone.Frequency(freq).toMidi();
         const seed = {
             notes: [
-            { pitch: Tone.Frequency('C5').toMidi(), quantizedStartStep: 0, quantizedEndStep: 4 }
+            { pitch: midi_note, quantizedStartStep: 0, quantizedEndStep: 4 }
             ],
             totalQuantizedSteps: 4,
             quantizationInfo: { stepsPerQuarter: 4}
