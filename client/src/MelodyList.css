@@ -5,9 +5,25 @@
 .loadButton {
     padding: 4px;
     margin: 6px;
+    color: #7DA734;
+    font-size: 20px;
+    height: 40px;
+    width: 62px;
+    transition: background-color 0.2s, color 0.2s;
+    background-color: #EEF2E6;
+    border: 2px solid #9DD241;
+    border-radius: 3px;
 }
 
 .deleteButton {
     padding: 4px;
     margin: 6px;
+    color: #e84700;
+    font-size: 20px;
+    height: 40px;
+    width: 81px;
+    transition: background-color 0.2s, color 0.2s;
+    background-color: #eeddd6;
+    border: 2px solid #e75717;
+    border-radius: 3px;
 }

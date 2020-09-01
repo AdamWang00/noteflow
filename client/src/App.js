@@ -103,6 +103,10 @@ const App = (props) => {
     const [saveTitle, setSaveTitle] = React.useState(null);
     const [saveMessage, setSaveMessage] = React.useState(null);
 
+    const [loadModal, setLoadModal] = React.useState(false);
+    const [loadID, setLoadID] = React.useState(null);
+    const [loadMessage, setLoadMessage] = React.useState(null);
+
     const synth = props.synth;
     const validKeys = ["C","G","D","A","E","B","F#","C#","Cb","Gb","Db","Ab","Eb","Bb","F"];
 
@@ -252,6 +256,16 @@ const App = (props) => {
         }
     };
 
+    const onLoadButton = async () => {
+        const token = cookies["token"];
+        const name = await checkAuth();
+        if (name===null) {
+            setAuth(null);
+        } else {
+            setLoadModal(true);
+        }
+    };
+
     const onSave = async () => {
         if (!saveTitle) {
             setSaveMessage("Enter a title for your melody");
@@ -296,6 +310,33 @@ const App = (props) => {
         setSaveModal(false);
         setSaveMessage(null);
     };
+
+    const clearLoad = () => {
+        setLoadID(null);
+        setLoadModal(false);
+        setLoadMessage(null);
+    }
+
+    const onLoad = async () => {
+        if (!loadID) {
+            setLoadID("Enter the ID of a melody that you want to load");
+            return;
+        }
+
+        const name = await checkAuth();
+        if (name === null) {
+            setAuth(null);
+        } else {
+            const data = await Requests.newMelody(loadID);
+            if (data["error"]) {
+                console.log("[ERROR]", data["error"]);
+
+            } else {
+                onLoadMelody(data.melodyData);
+            }
+        }
+        setLoadModal(true);
+    }
 
     const updateNotes = newMelodyData => {
        setMelodyData(newMelodyData);
@@ -396,9 +437,10 @@ const App = (props) => {
                 <Button variant="outline-primary" onClick={onPlayPause}>{play ? "Stop" : "Play"}</Button>{' '}
                 <Generator melodyRnn={melodyRnn} updateNotes={updateNotes} keySignature={keySignature}/>{' '}
                 <Button variant={auth===null ? "outline-secondary" : "outline-primary"} onClick={auth===null ? onLoginLogoutButton : onSaveButton}>{auth===null ? "Login to save melody" : "Save melody"}</Button>
+                <Button variant={auth===null ? "outline-secondary" : "outline-primary"} onClick={auth===null ? onLoginLogoutButton : onLoadButton}>{auth===null ? "Login to load melody" : "Load melody"}</Button>
                 { auth!==null && <MelodyList update={melodyListKey} name={auth} onLoadMelody={onLoadMelody} onDeleteMelody={onDeleteMelody} /> }
 
-                <Modal show={loginModal} onHide={clearLogin}>
+                <Modal show={loginModal} onHide={clearLogin} className="modal">
                     <Modal.Header closeButton>
                         <Modal.Title>login to noteflow</Modal.Title>
                     </Modal.Header>
@@ -427,9 +469,9 @@ const App = (props) => {
                     </Modal.Footer>
                 </Modal>
 
-                <Modal show={registerModal} onHide={clearRegister}>
+                <Modal show={registerModal} onHide={clearRegister} className="modal">
                     <Modal.Header closeButton>
-                        <Modal.Title>Create a noteflow account</Modal.Title>
+                        <Modal.Title>create a noteflow account</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
                         {registerMessage}
@@ -475,6 +517,29 @@ const App = (props) => {
                         </Button>
                         <Button variant="primary" onClick={onSave}>
                             Save
+                        </Button>
+                    </Modal.Footer>
+                </Modal>
+
+                <Modal show={loadModal} onHide={clearLoad}>
+                    <Modal.Header closeButton>
+                        <Modal.Title>Load melody</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        {loadMessage}
+                        <InputGroup className="m-2">
+                            <InputGroup.Prepend>
+                                <InputGroup.Text id="inputGroup-sizing-default">Melody ID</InputGroup.Text>
+                            </InputGroup.Prepend>
+                            <FormControl type="text" onChange={e => setLoadID(e.target.value)}/>
+                        </InputGroup>
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <Button variant="secondary" onClick={clearLoad}>
+                            Cancel
+                        </Button>
+                        <Button variant="primary" onClick={onLoad}>
+                            Load Melody
                         </Button>
                     </Modal.Footer>
                 </Modal>
