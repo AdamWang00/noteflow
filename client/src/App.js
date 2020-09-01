@@ -402,6 +402,7 @@ const App = (props) => {
     const render = () => {
         if (!started) return <div className="jumbo">
                 <h1 className="startHeader">welcome to <span className="noteflow">noteflow</span></h1>
+                <p className="startSubheader">a notebook for collaborative melody composition using magenta</p>
                 <br />
                 <button className="startButton" onClick={onStart}>start</button>
             </div>;
@@ -442,7 +443,7 @@ const App = (props) => {
                 <Generator melodyRnn={melodyRnn} updateNotes={updateNotes} keySignature={keySignature}/>{' '}
                 <br />
                 <br />
-                <Button variant={auth===null ? "outline-secondary" : "outline-primary"} onClick={auth===null ? onLoginLogoutButton : onSaveButton}>{auth===null ? "Login to save melody" : "Save melody"}</Button>{' '}
+                <Button variant={auth===null ? "outline-secondary" : "outline-primary"} onClick={auth===null ? onLoginLogoutButton : onSaveButton}>{auth===null ? "Login to save melodies" : "Save melody"}</Button>{' '}
                 <Button variant="outline-primary" onClick={onLoadButton}>Import melody from ID</Button>
                 { auth!==null && <MelodyList update={melodyListKey} name={auth} onLoadMelody={onLoadMelody} onDeleteMelody={onDeleteMelody} onShareMelody={onShareMelody} /> }
 

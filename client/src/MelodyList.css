@@ -35,18 +35,18 @@
 }
 
 .shareButton {
-    color: #7DA734;
+    color: #3478A7;
     font-size: 16px;
     height: 28px;
-    width: 60px;
+    width: 64px;
     transition: background-color 0.2s, color 0.2s;
-    background-color: #EEF2E6;
-    border: 2px solid #9DD241;
+    background-color: #E6EDF2;
+    border: 2px solid #4196D2;
     border-radius: 3px;
 }
 
 .shareButton:hover {
-    background-color: #9DD241;
+    background-color: #4196D2;
     color: white;
 }
 
