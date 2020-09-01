@@ -86,7 +86,7 @@ const melodyRnn = new mm.MusicRNN("https://storage.googleapis.com/magentadata/js
 const melodyRnnLoaded = melodyRnn.initialize();
 
 const App = (props) => {
-    const [ value, setValue ] = React.useState(0); 
+    const [temperature, setTemperature] = React.useState(1.2);
 
     const [cookies, setCookie, removeCookie] = useCookies(["token"]);
     const [auth, setAuth] = React.useState(null);
@@ -347,8 +347,8 @@ const App = (props) => {
     };
 
     const updateNotes = newMelodyData => {
-       setMelodyData(newMelodyData);
-       setTitle("");
+        setTitle("");
+        setMelodyData(newMelodyData);
     };
 
     const checkAuth = async (optionalToken) => {
@@ -440,21 +440,27 @@ const App = (props) => {
                         </InputGroup.Prepend>
                         <FormControl placeholder={qpm} type="text" onChange={onQPMChanged}/>
                     </InputGroup>
-                </div>
-                    <RangeSlider
-                    value={value}
-                    min = {0.6}
-                    max = {2.0}
-                    step = {0.1}
-                    onChange={changeEvent => setValue(changeEvent.target.value)}
-                    />
-                <div>
-
+                </div>{' '}
+                    
+                <div className="tempInput" style={{display: "inline-block"}}>
+                    <InputGroup className="mb-3">
+                        <InputGroup.Prepend>
+                            <InputGroup.Text>Temperature</InputGroup.Text>
+                        </InputGroup.Prepend>
+                        <RangeSlider
+                            value={temperature}
+                            min = {0.5}
+                            max = {2.0}
+                            step = {0.1}
+                            tooltip = {"on"}
+                            onChange={e => setTemperature(Number(e.target.value))}
+                        />
+                    </InputGroup>
                 </div>
 
                 <br />
                 <Button variant={play ? "outline-secondary" : "success"} onClick={onPlayPause}>{play ? "Stop" : "Play"}</Button>{' '}
-                <Generator melodyRnn={melodyRnn} updateNotes={updateNotes} keySignature={keySignature}/>{' '}
+                <Generator melodyRnn={melodyRnn} updateNotes={updateNotes} keySignature={keySignature} temperature={temperature}/>{' '}
                 <br />
                 <br />
                 <Button variant={auth===null ? "outline-secondary" : "outline-primary"} onClick={auth===null ? onLoginLogoutButton : onSaveButton}>{auth===null ? "Login to save melodies" : "Save melody"}</Button>{' '}

@@ -5,7 +5,7 @@ import * as Tone from 'tone';
 import Vex from 'vexflow';
 
 const Generator = (props) => {
-    const { melodyRnn, updateNotes } = props;
+    const { temperature, melodyRnn, updateNotes } = props;
 
     const generateMelody = async () => {
         let random_note = Math.floor(Math.random() * 12) + 1;
@@ -19,7 +19,6 @@ const Generator = (props) => {
             quantizationInfo: { stepsPerQuarter: 4}
         };
         const steps = 28;
-        const temperature = 1.2;
 
         const result = await melodyRnn.continueSequence(seed, steps, temperature);
         const combined = mm.sequences.concatenate([seed, result]);
