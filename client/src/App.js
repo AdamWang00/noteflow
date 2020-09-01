@@ -355,7 +355,6 @@ const App = (props) => {
         const token = optionalToken || cookies["token"];
         const { data } = await Requests.account(token);
         if (data["error"]) {
-            console.log("[ERROR]", data["error"]);
             return null;
         } else {
             return data["name"];
@@ -372,7 +371,7 @@ const App = (props) => {
 
             const noteObj = new StaveNote({
                 keys: [noteName],
-                duration: noteRestsPairs[i][0][1],
+                duration: noteRestsPairs[i][0][1], // e.g. "2" => half note
             });
             
             const note = noteName.split("");
@@ -442,15 +441,15 @@ const App = (props) => {
                     </InputGroup>
                 </div>{' '}
                     
-                <div className="tempInput" style={{display: "inline-block"}}>
+                <div style={{display: "inline-block"}}>
                     <InputGroup className="mb-3">
                         <InputGroup.Prepend>
                             <InputGroup.Text>Temperature</InputGroup.Text>
                         </InputGroup.Prepend>
                         <RangeSlider
                             value={temperature}
-                            min = {0.5}
-                            max = {2.0}
+                            min = {0.8}
+                            max = {1.6}
                             step = {0.1}
                             tooltip = {"on"}
                             onChange={e => setTemperature(Number(e.target.value))}
@@ -459,9 +458,16 @@ const App = (props) => {
                 </div>
 
                 <br />
-                <Button variant={play ? "outline-secondary" : "success"} onClick={onPlayPause}>{play ? "Stop" : "Play"}</Button>{' '}
-                <Generator melodyRnn={melodyRnn} updateNotes={updateNotes} keySignature={keySignature} temperature={temperature}/>{' '}
-                <br />
+                <div style={{display: "inline-block"}}>
+                    <InputGroup className="mb-3">
+                        <Button variant={play ? "outline-secondary" : "success"} onClick={onPlayPause}>{play ? "Stop" : "Play"}</Button>
+                    </InputGroup>
+                </div>{' '}
+                <div style={{display: "inline-block"}}>
+                    <InputGroup className="mb-3">
+                        <Generator melodyRnn={melodyRnn} updateNotes={updateNotes} keySignature={keySignature} temperature={temperature}/>
+                    </InputGroup>
+                </div>
                 <br />
                 <Button variant={auth===null ? "outline-secondary" : "outline-primary"} onClick={auth===null ? onLoginLogoutButton : onSaveButton}>{auth===null ? "Login to save melodies" : "Save melody"}</Button>{' '}
                 <Button variant="outline-primary" onClick={onLoadButton}>Import melody from ID</Button>

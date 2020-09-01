@@ -33,8 +33,9 @@ const Generator = (props) => {
             const startDiff = (i + 1 === startSteps.length ? 32 : startSteps[i + 1]) - startSteps[i];
             const noteRests = [[null, null], null];
             const noteDuration = Math.pow(2, Math.floor(Math.log(startDiff) / Math.log(2)));
+            const noteType = (16 / noteDuration).toString();
             noteRests[0][0] = combined.notes[i].pitch;
-            noteRests[0][1] = (16 / noteDuration).toString();
+            noteRests[0][1] = noteType==="0.5" ? "1/2" : noteType.toString(); // double-whole note
 
             const restTime = startDiff - noteDuration;
             let counter = 1;
