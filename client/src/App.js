@@ -255,6 +255,16 @@ const App = (props) => {
         }
     };
 
+    const onLoadButton = async () => {
+        const token = cookies["token"];
+        const name = await checkAuth();
+        if (name===null) {
+            setAuth(null);
+        } else {
+            setLoadModal(true);
+        }
+    };
+
     const onSave = async () => {
         if (!saveTitle) {
             setSaveMessage("Enter a title for your melody");
@@ -317,8 +327,14 @@ const App = (props) => {
             setAuth(null);
         } else {
             const data = await Requests.newMelody(loadID);
-            onLoadMelody(data.melodyData);
+            if (data["error"]) {
+                console.log("[ERROR]", data["error"]);
+
+            } else {
+                onLoadMelody(data.melodyData);
+            }
         }
+        setLoadModal(true);
     }
 
     const updateNotes = newMelodyData => {
@@ -417,8 +433,8 @@ const App = (props) => {
                 <Button variant="outline-primary" onClick={onPlayPause}>{play ? "Stop" : "Play"}</Button>
                 <Generator melodyRnn={melodyRnn} updateNotes={updateNotes} keySignature={keySignature}/>
                 <Button variant={auth===null ? "outline-secondary" : "outline-primary"} onClick={auth===null ? onLoginLogoutButton : onSaveButton}>{auth===null ? "Login to save melody" : "Save melody"}</Button>
+                <Button variant={auth===null ? "outline-secondary" : "outline-primary"} onClick={auth===null ? onLoginLogoutButton : onLoadButton}>{auth===null ? "Login to load melody" : "Load melody"}</Button>
                 { auth!==null && <MelodyList update={melodyListKey} name={auth} onLoadMelody={onLoadMelody} onDeleteMelody={onDeleteMelody} /> }
-
                 <Modal show={loginModal} onHide={clearLogin}>
                     <Modal.Header closeButton>
                         <Modal.Title>Login to NoteFlow</Modal.Title>
@@ -502,7 +518,7 @@ const App = (props) => {
 
                 <Modal show={loadModal} onHide={clearLoad}>
                     <Modal.Header closeButton>
-                        <Modal.Title>Load a melody</Modal.Title>
+                        <Modal.Title>Load melody</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
                         {loadMessage}
