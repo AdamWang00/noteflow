@@ -327,12 +327,12 @@ const App = (props) => {
         if (name === null) {
             setAuth(null);
         } else {
-            const data = await Requests.newMelody(loadID);
+            const data = await Requests.getPost(loadID);
             if (data["error"]) {
                 console.log("[ERROR]", data["error"]);
 
             } else {
-                onLoadMelody(data.melodyData);
+                onLoadMelody(data.post.melody_data);
             }
         }
         setLoadModal(true);
