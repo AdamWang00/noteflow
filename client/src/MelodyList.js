@@ -1,6 +1,9 @@
 import React from 'react'
 import * as Requests from './requests.js'
 import './MelodyList.css'
+import Container from 'react-bootstrap/Container';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
 
 const MelodyList = (props) => {
     const { update, name, onLoadMelody, onDeleteMelody } = props;
@@ -19,7 +22,28 @@ const MelodyList = (props) => {
 
     const renderMelody = (melody) => {
         return (
+
             <div key={melody.id}>
+
+            <Container>
+                <Row>
+                    <Col xs lg="2">
+                    1 of 3 hello world 
+                    </Col>
+                    <Col md="auto">1 of 3 hello world test test</Col>
+                    <Col xs lg="2">
+                    3 of 3
+                    </Col>
+                </Row>
+                <Row>
+                    <Col xs lg="2">1 of 3</Col>
+                    <Col md="auto">Variable width content</Col>
+                    <Col xs lg="2">
+                    3 of 3
+                    </Col>
+                </Row>
+            </Container>
+
                 <b>{melody.title}</b>
                 {" "+melody.date}
                 <button className="loadButton" onClick={() => onLoadMelody(melody.melody_data)}>Load</button>
