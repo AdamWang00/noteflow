@@ -412,7 +412,7 @@ const App = (props) => {
             </div>;
         return (
             <div className="jumbo">
-                <h1 className="noteflow" style={{fontSize: 80}}>{auth!==null && auth + "'s "}noteflow</h1>
+                <h1 className="noteflow" style={{fontSize: 64}}>{auth!==null && auth + "'s "}noteflow</h1>
                 <br></br>
                 <Button variant={auth===null ? "outline-primary" : "outline-secondary"} onClick={onLoginLogoutButton}>{auth===null ? "Login" : "Logout"}</Button>{' '}
                 {auth===null && <Button variant="primary" onClick={onRegisterButton}>Register</Button>}
@@ -424,19 +424,19 @@ const App = (props) => {
                 <Notes notes={notes} keySignature={keySignature}/>
                 <br />
 
-                <div style={{display: "inline-block"}}>
+                <div className="keyInput" style={{display: "inline-block"}}>
                     <InputGroup className="mb-3">
                         <InputGroup.Prepend>
-                            <InputGroup.Text id="inputGroup-sizing-default">Key</InputGroup.Text>
+                            <InputGroup.Text>Key</InputGroup.Text>
                         </InputGroup.Prepend>
                         <FormControl placeholder={keySignature} type="text" onChange={onKeyChanged}/>
                     </InputGroup>
                 </div> {' '}
 
-                <div style={{display: "inline-block"}}>
+                <div className="qpmInput" style={{display: "inline-block"}}>
                     <InputGroup className="mb-3">
                         <InputGroup.Prepend>
-                            <InputGroup.Text id="inputGroup-sizing-default">QPM</InputGroup.Text>
+                            <InputGroup.Text>QPM</InputGroup.Text>
                         </InputGroup.Prepend>
                         <FormControl placeholder={qpm} type="text" onChange={onQPMChanged}/>
                     </InputGroup>
@@ -469,13 +469,13 @@ const App = (props) => {
                         {loginMessage}
                         <InputGroup className="m-2">
                             <InputGroup.Prepend>
-                                <InputGroup.Text id="inputGroup-sizing-default">Name</InputGroup.Text>
+                                <InputGroup.Text>Name</InputGroup.Text>
                             </InputGroup.Prepend>
                             <FormControl type="text" onChange={e => setLoginName(e.target.value)}/>
                         </InputGroup>
                         <InputGroup className="m-2">
                             <InputGroup.Prepend>
-                                <InputGroup.Text id="inputGroup-sizing-default">Password</InputGroup.Text>
+                                <InputGroup.Text>Password</InputGroup.Text>
                             </InputGroup.Prepend>
                             <FormControl type="password" onChange={e => setLoginPassword(e.target.value)}/>
                         </InputGroup>
@@ -498,13 +498,13 @@ const App = (props) => {
                         {registerMessage}
                         <InputGroup className="m-2">
                             <InputGroup.Prepend>
-                                <InputGroup.Text id="inputGroup-sizing-default">Name</InputGroup.Text>
+                                <InputGroup.Text>Name</InputGroup.Text>
                             </InputGroup.Prepend>
                             <FormControl type="text" onChange={e => setRegisterName(e.target.value)}/>
                         </InputGroup>
                         <InputGroup className="m-2">
                             <InputGroup.Prepend>
-                                <InputGroup.Text id="inputGroup-sizing-default">Password</InputGroup.Text>
+                                <InputGroup.Text>Password</InputGroup.Text>
                             </InputGroup.Prepend>
                             <FormControl type="password" onChange={e => setRegisterPassword(e.target.value)}/>
                         </InputGroup>
@@ -527,7 +527,7 @@ const App = (props) => {
                         {saveMessage}
                         <InputGroup className="m-2">
                             <InputGroup.Prepend>
-                                <InputGroup.Text id="inputGroup-sizing-default">Melody Title</InputGroup.Text>
+                                <InputGroup.Text>Melody Title</InputGroup.Text>
                             </InputGroup.Prepend>
                             <FormControl type="text" onChange={e => setSaveTitle(e.target.value)}/>
                         </InputGroup>
@@ -550,7 +550,7 @@ const App = (props) => {
                         {loadMessage}
                         <InputGroup className="m-2">
                             <InputGroup.Prepend>
-                                <InputGroup.Text id="inputGroup-sizing-default">Melody ID</InputGroup.Text>
+                                <InputGroup.Text>Melody ID</InputGroup.Text>
                             </InputGroup.Prepend>
                             <FormControl type="text" onChange={e => setLoadID(e.target.value)}/>
                         </InputGroup>

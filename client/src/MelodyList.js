@@ -21,7 +21,6 @@ const MelodyList = (props) => {
     }
 
     const renderHeader = () => {
-        console.log(melodies)
         if (melodies === undefined || melodies.length === 0) return "Your saved melodies will appear here.";
         return (
             <Row className="justify-content-xs-center row">

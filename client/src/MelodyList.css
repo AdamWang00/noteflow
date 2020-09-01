@@ -9,7 +9,7 @@
     width: 60px;
     transition: background-color 0.2s, color 0.2s;
     background-color: #EEF2E6;
-    border: 2px solid #9DD241;
+    border: 1px solid #9DD241;
     border-radius: 3px;
 }
 
@@ -25,7 +25,7 @@
     width: 70px;
     transition: background-color 0.2s, color 0.2s;
     background-color: #F2EAE6;
-    border: 2px solid #e75717;
+    border: 1px solid #e75717;
     border-radius: 3px;
 }
 
@@ -41,7 +41,7 @@
     width: 64px;
     transition: background-color 0.2s, color 0.2s;
     background-color: #E6EDF2;
-    border: 2px solid #4196D2;
+    border: 1px solid #4196D2;
     border-radius: 3px;
 }
 

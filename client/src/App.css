@@ -33,9 +33,9 @@
 
 .jumbo {
     background-color: #F7F7F7;
-    padding: 60px 40px;
+    padding: 50px 30px;
     border-radius: 3px;
-    margin: 60px 0px;
+    margin: 25px 0px;
     min-width: 900px;
 }
 
@@ -46,4 +46,16 @@
 
 .shareId {
     font-size: 24px;
+}
+
+.keyInput {
+    width: 108px;
+}
+
+.qpmInput {
+    width: 130px;
+}
+
+.tempInput {
+    width: 500px;
 }
