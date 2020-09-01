@@ -398,7 +398,7 @@ const App = (props) => {
                 <Button variant={auth===null ? "outline-secondary" : "outline-primary"} onClick={auth===null ? onLoginLogoutButton : onSaveButton}>{auth===null ? "Login to save melody" : "Save melody"}</Button>
                 { auth!==null && <MelodyList update={melodyListKey} name={auth} onLoadMelody={onLoadMelody} onDeleteMelody={onDeleteMelody} /> }
 
-                <Modal show={loginModal} onHide={clearLogin}>
+                <Modal show={loginModal} onHide={clearLogin} className="modal">
                     <Modal.Header closeButton>
                         <Modal.Title>login to noteflow</Modal.Title>
                     </Modal.Header>
@@ -427,9 +427,9 @@ const App = (props) => {
                     </Modal.Footer>
                 </Modal>
 
-                <Modal show={registerModal} onHide={clearRegister}>
+                <Modal show={registerModal} onHide={clearRegister} className="modal">
                     <Modal.Header closeButton>
-                        <Modal.Title>Create a noteflow account</Modal.Title>
+                        <Modal.Title>create a noteflow account</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
                         {registerMessage}
