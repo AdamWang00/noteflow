@@ -330,7 +330,6 @@ const App = (props) => {
             const data = await Requests.getPost(loadID);
             if (data["error"]) {
                 console.log("[ERROR]", data["error"]);
-
             } else {
                 onLoadMelody(data.post.melody_data);
             }
