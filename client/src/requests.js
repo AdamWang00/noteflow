@@ -1,6 +1,6 @@
 import axios from "axios"
 
-const url = "https://54.161.220.66";
+const url = "https://allegr0.xyz";
 
 
 const post = (path, data) => {
