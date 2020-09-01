@@ -326,6 +326,26 @@ const App = (props) => {
         setLoadMessage(null);
     };
 
+    const onLoad = async () => {
+        if (!loadID) {
+            setLoadID("Enter the ID of a melody that you want to load");
+            return;
+        }
+
+        const name = await checkAuth();
+        if (name === null) {
+            setAuth(null);
+        } else {
+            const data = await Requests.getPost(loadID);
+            if (data["error"]) {
+                console.log("[ERROR]", data["error"]);
+            } else {
+                onLoadMelody(data.post.melody_data);
+            }
+        }
+        setLoadModal(true);
+    };
+
     const updateNotes = newMelodyData => {
        setMelodyData(newMelodyData);
        setTitle("");
