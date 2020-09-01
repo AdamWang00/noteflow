@@ -1,6 +1,6 @@
 import axios from "axios"
 
-const url = "http://54.161.220.66";
+const url = "https://54.161.220.66";
 
 
 const post = (path, data) => {
