@@ -6,7 +6,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 
 const MelodyList = (props) => {
-    const { update, name, onLoadMelody, onDeleteMelody } = props;
+    const { update, name, onLoadMelody, onDeleteMelody, onShareMelody } = props;
     const [melodies, setMelodies] = React.useState(null);
 
     const getMelodies = async () => {
@@ -20,35 +20,33 @@ const MelodyList = (props) => {
         }
     }
 
+    const renderHeader = () => {
+        console.log(melodies)
+        if (melodies === undefined || melodies.length === 0) return "Your saved melodies will appear here.";
+        return (
+            <Row className="justify-content-xs-center row">
+                <Col xs="4">
+                    <b>Title</b>
+                </Col>
+                <Col xs="4">
+                    <b>Date saved</b>
+                </Col>
+            </Row>
+        )
+    }
+
     const renderMelody = (melody) => {
         return (
-
-            <div key={melody.id}>
-
-            <Container>
-                <Row>
-                    <Col xs lg="2">
-                    1 of 3 hello world 
-                    </Col>
-                    <Col md="auto">1 of 3 hello world test test</Col>
-                    <Col xs lg="2">
-                    3 of 3
-                    </Col>
-                </Row>
-                <Row>
-                    <Col xs lg="2">1 of 3</Col>
-                    <Col md="auto">Variable width content</Col>
-                    <Col xs lg="2">
-                    3 of 3
-                    </Col>
-                </Row>
-            </Container>
-
-                <b>{melody.title}</b>
-                {" "+melody.date}
-                <button className="loadButton" onClick={() => onLoadMelody(melody.melody_data)}>Load</button>
-                <button className="deleteButton" onClick={() => onDeleteMelody(melody.id)}>Delete</button>
-            </div>
+            <Row key={melody.id} className="justify-content-xs-center row">
+                <Col xs="4" className="title">{melody.title}</Col>
+                <Col xs="4" className="date">{melody.date}</Col>
+                <Col xs="4">
+                    <button className="loadButton" onClick={() => onLoadMelody(melody.melody_data)}>Load</button>{' '}
+                    <button className="shareButton" onClick={() => onShareMelody(melody.id, melody.title)}>Share</button>{' '}
+                    <button className="deleteButton" onClick={() => onDeleteMelody(melody.id)}>Delete</button>
+                </Col>
+                
+            </Row>
         )
     }
 
@@ -60,7 +58,10 @@ const MelodyList = (props) => {
         return (
             <div className="MelodyList">
                 <h3>Saved Melodies</h3>
-                {melodies.map(renderMelody)}
+                <Container fluid>
+                    {renderHeader()}
+                    {melodies.map(renderMelody)}
+                </Container>
             </div>
         );
     } else {

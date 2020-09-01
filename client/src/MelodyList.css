@@ -3,27 +3,57 @@
 }
 
 .loadButton {
-    padding: 4px;
-    margin: 6px;
     color: #7DA734;
-    font-size: 20px;
-    height: 40px;
-    width: 62px;
+    font-size: 16px;
+    height: 28px;
+    width: 60px;
     transition: background-color 0.2s, color 0.2s;
     background-color: #EEF2E6;
     border: 2px solid #9DD241;
     border-radius: 3px;
 }
 
+.loadButton:hover {
+    background-color: #9DD241;
+    color: white;
+}
+
 .deleteButton {
-    padding: 4px;
-    margin: 6px;
     color: #e84700;
-    font-size: 20px;
-    height: 40px;
-    width: 81px;
+    font-size: 16px;
+    height: 28px;
+    width: 70px;
     transition: background-color 0.2s, color 0.2s;
-    background-color: #eeddd6;
+    background-color: #F2EAE6;
     border: 2px solid #e75717;
     border-radius: 3px;
+}
+
+.deleteButton:hover {
+    background-color: #e75717;
+    color: white;
+}
+
+.shareButton {
+    color: #7DA734;
+    font-size: 16px;
+    height: 28px;
+    width: 60px;
+    transition: background-color 0.2s, color 0.2s;
+    background-color: #EEF2E6;
+    border: 2px solid #9DD241;
+    border-radius: 3px;
+}
+
+.shareButton:hover {
+    background-color: #9DD241;
+    color: white;
+}
+
+.row {
+    margin: 6px;
+}
+
+.title, .date {
+    font-size: 16px
 }

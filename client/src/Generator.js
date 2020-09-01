@@ -19,7 +19,7 @@ const Generator = (props) => {
             quantizationInfo: { stepsPerQuarter: 4}
         };
         const steps = 28;
-        const temperature = 1.5;
+        const temperature = 1.0;
 
         const result = await melodyRnn.continueSequence(seed, steps, temperature);
         const combined = mm.sequences.concatenate([seed, result]);
@@ -52,7 +52,7 @@ const Generator = (props) => {
         updateNotes(noteRestsPairs);
     };
 
-    return <Button variant="outline-success" onClick={generateMelody}>Generate</Button>;
+    return <Button variant="info" onClick={generateMelody}>Generate</Button>;
 }
 
 export default Generator;

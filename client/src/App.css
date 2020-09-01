@@ -5,7 +5,7 @@
 
 .startButton {
     color: #7DA734;
-    font-size: 30px;
+    font-size: 36px;
     height: 80px;
     width: 160px;
     transition: background-color 0.2s, color 0.2s;
@@ -32,9 +32,14 @@
     padding: 60px 40px;
     border-radius: 3px;
     margin: 60px 0px;
+    min-width: 900px;
 }
 
 .modal {
     text-align: center;
     font-family: 'Montserrat', sans-serif;
+}
+
+.shareId {
+    font-size: 24px;
 }

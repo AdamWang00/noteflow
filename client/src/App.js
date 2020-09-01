@@ -106,6 +106,10 @@ const App = (props) => {
     const [loadID, setLoadID] = React.useState(null);
     const [loadMessage, setLoadMessage] = React.useState(null);
 
+    const [shareModal, setShareModal] = React.useState(false);
+    const [shareId, setShareId] = React.useState(null);
+    const [shareTitle, setShareTitle] = React.useState(null);
+
     const synth = props.synth;
     const validKeys = ["C","G","D","A","E","B","F#","C#","Cb","Gb","Db","Ab","Eb","Bb","F"];
 
@@ -194,6 +198,12 @@ const App = (props) => {
             await Requests.deletePost(token, melodyId);
             setMelodyListKey(melodyListKey + 1);
         }
+    };
+
+    const onShareMelody = async (melodyId, melodyTitle) => {
+        setShareModal(true);
+        setShareId(melodyId);
+        setShareTitle(melodyTitle)
     };
 
     const onLoginLogoutButton = () => {
@@ -326,6 +336,12 @@ const App = (props) => {
         setLoadMessage(null);
     };
 
+    const clearShare = () => {
+        setShareId(null);
+        setShareTitle(null);
+        setShareModal(false);
+    };
+
     const updateNotes = newMelodyData => {
        setMelodyData(newMelodyData);
        setTitle("");
@@ -393,8 +409,8 @@ const App = (props) => {
             <div className="jumbo">
                 <h1 className="noteflow" style={{fontSize: 80}}>{auth!==null && auth + "'s "}noteflow</h1>
                 <br></br>
-                <Button variant="outline-secondary" onClick={onLoginLogoutButton}>{auth===null ? "Login" : "Logout"}</Button>{' '}
-                {auth===null && <Button variant="outline-primary" onClick={onRegisterButton}>Register</Button>}
+                <Button variant={auth===null ? "outline-primary" : "outline-secondary"} onClick={onLoginLogoutButton}>{auth===null ? "Login" : "Logout"}</Button>{' '}
+                {auth===null && <Button variant="primary" onClick={onRegisterButton}>Register</Button>}
                 <br />
                 <br />
                 <hr/>
@@ -422,11 +438,13 @@ const App = (props) => {
                 </div>
 
                 <br />
-                <Button variant="outline-primary" onClick={onPlayPause}>{play ? "Stop" : "Play"}</Button>{' '}
+                <Button variant={play ? "outline-secondary" : "success"} onClick={onPlayPause}>{play ? "Stop" : "Play"}</Button>{' '}
                 <Generator melodyRnn={melodyRnn} updateNotes={updateNotes} keySignature={keySignature}/>{' '}
+                <br />
+                <br />
                 <Button variant={auth===null ? "outline-secondary" : "outline-primary"} onClick={auth===null ? onLoginLogoutButton : onSaveButton}>{auth===null ? "Login to save melody" : "Save melody"}</Button>{' '}
-                <Button variant="outline-primary" onClick={onLoadButton}>Load melody from ID</Button>
-                { auth!==null && <MelodyList update={melodyListKey} name={auth} onLoadMelody={onLoadMelody} onDeleteMelody={onDeleteMelody} /> }
+                <Button variant="outline-primary" onClick={onLoadButton}>Import melody from ID</Button>
+                { auth!==null && <MelodyList update={melodyListKey} name={auth} onLoadMelody={onLoadMelody} onDeleteMelody={onDeleteMelody} onShareMelody={onShareMelody} /> }
 
                 <Modal show={loginModal} onHide={clearLogin} className="modal">
                     <Modal.Header closeButton>
@@ -528,6 +546,22 @@ const App = (props) => {
                         </Button>
                         <Button variant="primary" onClick={onLoad}>
                             Load Melody
+                        </Button>
+                    </Modal.Footer>
+                </Modal>
+
+                <Modal show={shareModal} onHide={clearShare}>
+                    <Modal.Header closeButton>
+                        <Modal.Title>{'Share "' + shareTitle + '"'}</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <p>Unique melody ID:</p>
+                        <p className="shareId"><b>{shareId}</b></p>
+                        <p>Others can view your melody on noteflow by selecting "Import melody from ID"</p>
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <Button variant="secondary" onClick={clearShare}>
+                            Close
                         </Button>
                     </Modal.Footer>
                 </Modal>
