@@ -1,0 +1,17 @@
+{
+  "hosting": {
+    "public": "client/build",
+    "site": "noteflow-bitrate",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ]
+  }
+}
