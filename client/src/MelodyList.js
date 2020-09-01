@@ -20,7 +20,9 @@ const MelodyList = (props) => {
     const renderMelody = (melody) => {
         return (
             <div key={melody.id}>
-                {melody.title + " " + melody.date}
+                {/* {melody.title + " " + melody.date} */}
+                <b>{melody.title}</b>
+                {" "+melody.date}
                 <button className="loadButton" onClick={() => onLoadMelody(melody.melody_data)}>Load</button>
                 <button className="deleteButton" onClick={() => onDeleteMelody(melody.id)}>Delete</button>
             </div>
