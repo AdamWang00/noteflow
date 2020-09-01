@@ -1,5 +1,4 @@
 import React from 'react';
-import Jumbotron from 'react-bootstrap/Jumbotron';
 import Button from 'react-bootstrap/Button';
 import InputGroup from 'react-bootstrap/InputGroup';
 import FormControl from 'react-bootstrap/FormControl';
@@ -248,7 +247,7 @@ const App = (props) => {
 
     const onSaveButton = async () => {
         const token = cookies["token"];
-        const name = await checkAuth();
+        const name = await checkAuth(token);
         if (name===null) {
             setAuth(null);
         } else {
@@ -257,13 +256,7 @@ const App = (props) => {
     };
 
     const onLoadButton = async () => {
-        const token = cookies["token"];
-        const name = await checkAuth();
-        if (name===null) {
-            setAuth(null);
-        } else {
-            setLoadModal(true);
-        }
+        setLoadModal(true);
     };
 
     const onSave = async () => {
@@ -273,7 +266,7 @@ const App = (props) => {
         }
 
         const token = cookies["token"];
-        const name = await checkAuth();
+        const name = await checkAuth(token);
         if (name===null) {
             setAuth(null);
         } else {
@@ -281,6 +274,22 @@ const App = (props) => {
             setTitle(saveTitle);
             clearSave();
             setMelodyListKey(melodyListKey + 1);
+        }
+    }
+
+    const onLoad = async () => {
+        if (!loadID) {
+            setLoadMessage("Enter the ID of the melody that you want to load");
+            return;
+        }
+
+        const { data } = await Requests.getPost(loadID);
+        if (data["error"]) {
+            console.log("[ERROR]", data["error"]);
+            setLoadMessage("Melody ID not found");
+        } else {
+            onLoadMelody(data.post.melody_data);
+            clearLoad();
         }
     }
 
@@ -315,28 +324,7 @@ const App = (props) => {
         setLoadID(null);
         setLoadModal(false);
         setLoadMessage(null);
-    }
-
-    const onLoad = async () => {
-        if (!loadID) {
-            setLoadID("Enter the ID of a melody that you want to load");
-            return;
-        }
-
-        const name = await checkAuth();
-        if (name === null) {
-            setAuth(null);
-        } else {
-            const data = await Requests.newMelody(loadID);
-            if (data["error"]) {
-                console.log("[ERROR]", data["error"]);
-
-            } else {
-                onLoadMelody(data.melodyData);
-            }
-        }
-        setLoadModal(true);
-    }
+    };
 
     const updateNotes = newMelodyData => {
        setMelodyData(newMelodyData);
@@ -436,8 +424,8 @@ const App = (props) => {
                 <br />
                 <Button variant="outline-primary" onClick={onPlayPause}>{play ? "Stop" : "Play"}</Button>{' '}
                 <Generator melodyRnn={melodyRnn} updateNotes={updateNotes} keySignature={keySignature}/>{' '}
-                <Button variant={auth===null ? "outline-secondary" : "outline-primary"} onClick={auth===null ? onLoginLogoutButton : onSaveButton}>{auth===null ? "Login to save melody" : "Save melody"}</Button>
-                <Button variant={auth===null ? "outline-secondary" : "outline-primary"} onClick={auth===null ? onLoginLogoutButton : onLoadButton}>{auth===null ? "Login to load melody" : "Load melody"}</Button>
+                <Button variant={auth===null ? "outline-secondary" : "outline-primary"} onClick={auth===null ? onLoginLogoutButton : onSaveButton}>{auth===null ? "Login to save melody" : "Save melody"}</Button>{' '}
+                <Button variant="outline-primary" onClick={onLoadButton}>Load melody from ID</Button>
                 { auth!==null && <MelodyList update={melodyListKey} name={auth} onLoadMelody={onLoadMelody} onDeleteMelody={onDeleteMelody} /> }
 
                 <Modal show={loginModal} onHide={clearLogin} className="modal">

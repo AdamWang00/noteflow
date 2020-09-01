@@ -3,8 +3,6 @@ import Button from 'react-bootstrap/Button';
 import * as mm from "@magenta/music";
 import * as Tone from 'tone';
 import Vex from 'vexflow';
-// import * as p5 from 'p5';
-// import * as ml5 from 'ml5';
 
 const Generator = (props) => {
     const { melodyRnn, updateNotes } = props;
