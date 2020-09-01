@@ -356,13 +356,13 @@ const App = (props) => {
 
     const render = () => {
         if (!started) return <div className="jumbo">
-                <h1 className="startHeader">Welcome to <span className="noteflow">noteflow</span></h1>
+                <h1 className="startHeader">welcome to <span className="noteflow">noteflow</span></h1>
                 <br />
-                <button className="startButton" onClick={onStart}>Start</button>
+                <button className="startButton" onClick={onStart}>start</button>
             </div>;
         return (
             <div className="jumbo">
-                <h1>{auth!==null && auth + "'s "}noteflow</h1>
+                <h1 className="noteflow" style={{fontSize: 80}}>{auth!==null && auth + "'s "}noteflow</h1>
                 <br></br>
                 <Button variant="outline-secondary" onClick={onLoginLogoutButton}>{auth===null ? "Login" : "Logout"}</Button>{' '}
                 {auth===null && <Button variant="outline-primary" onClick={onRegisterButton}>Register</Button>}
@@ -400,7 +400,7 @@ const App = (props) => {
 
                 <Modal show={loginModal} onHide={clearLogin}>
                     <Modal.Header closeButton>
-                        <Modal.Title>Login to noteflow</Modal.Title>
+                        <Modal.Title>login to noteflow</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
                         {loginMessage}
