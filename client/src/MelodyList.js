@@ -21,8 +21,8 @@ const MelodyList = (props) => {
         return (
             <div key={melody.id}>
                 {melody.title + " " + melody.date}
-                <button onClick={() => onLoadMelody(melody.melody_data)}>Load</button>
-                <button onClick={() => onDeleteMelody(melody.id)}>Delete</button>
+                <button className="loadButton" onClick={() => onLoadMelody(melody.melody_data)}>Load</button>
+                <button className="deleteButton" onClick={() => onDeleteMelody(melody.id)}>Delete</button>
             </div>
         )
     }

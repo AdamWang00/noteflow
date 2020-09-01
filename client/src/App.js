@@ -19,6 +19,7 @@ import { getNoteFromPitch, getInitialAccidentals } from './utils.js';
 
 const { Accidental, StaveNote } = Vex.Flow;
 
+
 const durationToFloat = {
     "1": 4,
     "2": 2,
@@ -395,17 +396,20 @@ const App = (props) => {
     }, [melodyData, keySignature])
 
     const render = () => {
-        if (!started) return <Jumbotron>
-            <h1>Welcome to NoteFlow</h1>
-            <br />
-            <Button onClick={onStart}>Start</Button>
-            </Jumbotron>;
+        if (!started) return <div className="jumbo">
+                <h1 className="startHeader">welcome to <span className="noteflow">noteflow</span></h1>
+                <br />
+                <button className="startButton" onClick={onStart}>start</button>
+            </div>;
         return (
-            <Jumbotron>
-                {auth!==null && auth}
-                <Button variant="outline-secondary" onClick={onLoginLogoutButton}>{auth===null ? "Login" : "Logout"}</Button>
+            <div className="jumbo">
+                <h1 className="noteflow" style={{fontSize: 80}}>{auth!==null && auth + "'s "}noteflow</h1>
+                <br></br>
+                <Button variant="outline-secondary" onClick={onLoginLogoutButton}>{auth===null ? "Login" : "Logout"}</Button>{' '}
                 {auth===null && <Button variant="outline-primary" onClick={onRegisterButton}>Register</Button>}
                 <br />
+                <br />
+                <hr/>
                 <br />
                 <h3>{title || "New Melody"}</h3>
                 <Notes notes={notes} keySignature={keySignature}/>
@@ -418,7 +422,7 @@ const App = (props) => {
                         </InputGroup.Prepend>
                         <FormControl placeholder={keySignature} type="text" onChange={onKeyChanged}/>
                     </InputGroup>
-                </div>
+                </div> {' '}
 
                 <div style={{display: "inline-block"}}>
                     <InputGroup className="mb-3">
@@ -430,14 +434,15 @@ const App = (props) => {
                 </div>
 
                 <br />
-                <Button variant="outline-primary" onClick={onPlayPause}>{play ? "Stop" : "Play"}</Button>
-                <Generator melodyRnn={melodyRnn} updateNotes={updateNotes} keySignature={keySignature}/>
+                <Button variant="outline-primary" onClick={onPlayPause}>{play ? "Stop" : "Play"}</Button>{' '}
+                <Generator melodyRnn={melodyRnn} updateNotes={updateNotes} keySignature={keySignature}/>{' '}
                 <Button variant={auth===null ? "outline-secondary" : "outline-primary"} onClick={auth===null ? onLoginLogoutButton : onSaveButton}>{auth===null ? "Login to save melody" : "Save melody"}</Button>
                 <Button variant={auth===null ? "outline-secondary" : "outline-primary"} onClick={auth===null ? onLoginLogoutButton : onLoadButton}>{auth===null ? "Login to load melody" : "Load melody"}</Button>
                 { auth!==null && <MelodyList update={melodyListKey} name={auth} onLoadMelody={onLoadMelody} onDeleteMelody={onDeleteMelody} /> }
-                <Modal show={loginModal} onHide={clearLogin}>
+
+                <Modal show={loginModal} onHide={clearLogin} className="modal">
                     <Modal.Header closeButton>
-                        <Modal.Title>Login to NoteFlow</Modal.Title>
+                        <Modal.Title>login to noteflow</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
                         {loginMessage}
@@ -464,9 +469,9 @@ const App = (props) => {
                     </Modal.Footer>
                 </Modal>
 
-                <Modal show={registerModal} onHide={clearRegister}>
+                <Modal show={registerModal} onHide={clearRegister} className="modal">
                     <Modal.Header closeButton>
-                        <Modal.Title>Create a NoteFlow account</Modal.Title>
+                        <Modal.Title>create a noteflow account</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
                         {registerMessage}
@@ -538,7 +543,7 @@ const App = (props) => {
                         </Button>
                     </Modal.Footer>
                 </Modal>
-            </Jumbotron>
+            </div>
         );
     }
 
