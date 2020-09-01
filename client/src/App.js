@@ -301,14 +301,14 @@ const App = (props) => {
     };
 
     const clearLoad = () => {
-        setLoadTitle(null);
+        setLoadID(null);
         setLoadModal(false);
         setLoadMessage(null);
     }
 
     const onLoad = async () => {
         if (!loadID) {
-            setLoadID("Enter the id of a melody that you want to load");
+            setLoadID("Enter the ID of a melody that you want to load");
             return;
         }
 
