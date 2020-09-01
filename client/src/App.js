@@ -255,7 +255,7 @@ const App = (props) => {
         }
     };
 
-    const onLoadButton = async () => {
+    const onLoadButton = () => {
         setLoadModal(true);
     };
 
@@ -275,7 +275,7 @@ const App = (props) => {
             clearSave();
             setMelodyListKey(melodyListKey + 1);
         }
-    }
+    };
 
     const onLoad = async () => {
         if (!loadID) {
@@ -291,7 +291,7 @@ const App = (props) => {
             onLoadMelody(data.post.melody_data);
             clearLoad();
         }
-    }
+    };
 
     const clearTimeouts = () => {
         timeouts.current.forEach(timeout => {
@@ -324,26 +324,6 @@ const App = (props) => {
         setLoadID(null);
         setLoadModal(false);
         setLoadMessage(null);
-    };
-
-    const onLoad = async () => {
-        if (!loadID) {
-            setLoadID("Enter the ID of a melody that you want to load");
-            return;
-        }
-
-        const name = await checkAuth();
-        if (name === null) {
-            setAuth(null);
-        } else {
-            const data = await Requests.getPost(loadID);
-            if (data["error"]) {
-                console.log("[ERROR]", data["error"]);
-            } else {
-                onLoadMelody(data.post.melody_data);
-            }
-        }
-        setLoadModal(true);
     };
 
     const updateNotes = newMelodyData => {
