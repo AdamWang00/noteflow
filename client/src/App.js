@@ -15,6 +15,8 @@ import * as mm from "@magenta/music";
 import { CookiesProvider } from 'react-cookie';
 import { useCookies } from 'react-cookie';
 import { getNoteFromPitch, getInitialAccidentals } from './utils.js';
+import 'react-bootstrap-range-slider/dist/react-bootstrap-range-slider.css';
+import RangeSlider from 'react-bootstrap-range-slider';
 
 const { Accidental, StaveNote } = Vex.Flow;
 
@@ -84,6 +86,8 @@ const melodyRnn = new mm.MusicRNN("https://storage.googleapis.com/magentadata/js
 const melodyRnnLoaded = melodyRnn.initialize();
 
 const App = (props) => {
+    const [ value, setValue ] = React.useState(0); 
+
     const [cookies, setCookie, removeCookie] = useCookies(["token"]);
     const [auth, setAuth] = React.useState(null);
     const [melodyListKey, setMelodyListKey] = React.useState(1); // use to force-update melody list
@@ -437,6 +441,16 @@ const App = (props) => {
                         <FormControl placeholder={qpm} type="text" onChange={onQPMChanged}/>
                     </InputGroup>
                 </div>
+                    <RangeSlider
+                    value={value}
+                    min = {0.6}
+                    max = {2.0}
+                    step = {0.1}
+                    onChange={changeEvent => setValue(changeEvent.target.value)}
+                    />
+                <div>
+
+                </div>
 
                 <br />
                 <Button variant={play ? "outline-secondary" : "success"} onClick={onPlayPause}>{play ? "Stop" : "Play"}</Button>{' '}
@@ -580,6 +594,7 @@ const App = (props) => {
                     {render()}
                 </div>
             </div>
+
         </CookiesProvider>
     );
 }
