@@ -18,7 +18,8 @@
     "react-dom": "^16.13.1",
     "react-scripts": "3.4.3",
     "tone": "^14.7.39",
-    "vexflow": "^3.0.9"
+    "vexflow": "^3.0.9",
+    "@material-ui/core": "latest"
   },
   "scripts": {
     "start": "react-scripts start",
