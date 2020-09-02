@@ -17,6 +17,7 @@ import { useCookies } from 'react-cookie';
 import { getNoteFromPitch, getInitialAccidentals } from './utils.js';
 import 'react-bootstrap-range-slider/dist/react-bootstrap-range-slider.css';
 import RangeSlider from 'react-bootstrap-range-slider';
+import Tooltip from '@material-ui/core/Tooltip';
 
 const { Accidental, StaveNote } = Vex.Flow;
 
@@ -401,7 +402,7 @@ const App = (props) => {
         setNotes(finalNotes);
         clearTimeouts();
     }, [melodyData, keySignature])
-
+    
     const render = () => {
         if (!started) return <div className="jumbo">
                 <h1 className="startHeader">welcome to <span className="noteflow">noteflow</span></h1>
@@ -424,37 +425,43 @@ const App = (props) => {
                 <br />
 
                 <div className="keyInput" style={{display: "inline-block"}}>
-                    <InputGroup className="mb-3">
-                        <InputGroup.Prepend>
-                            <InputGroup.Text>Key</InputGroup.Text>
-                        </InputGroup.Prepend>
-                        <FormControl placeholder={keySignature} type="text" onChange={onKeyChanged}/>
-                    </InputGroup>
+                    <Tooltip key = "the tonal center of your melody" arrow>
+                        <InputGroup className="mb-3">
+                            <InputGroup.Prepend>
+                                <InputGroup.Text>Key</InputGroup.Text>
+                            </InputGroup.Prepend>
+                            <FormControl placeholder={keySignature} type="text" onChange={onKeyChanged}/>
+                        </InputGroup>
+                    </Tooltip>
                 </div> {' '}
 
                 <div className="qpmInput" style={{display: "inline-block"}}>
-                    <InputGroup className="mb-3">
-                        <InputGroup.Prepend>
-                            <InputGroup.Text>QPM</InputGroup.Text>
-                        </InputGroup.Prepend>
-                        <FormControl placeholder={qpm} type="text" onChange={onQPMChanged}/>
-                    </InputGroup>
+                    <Tooltip title = "the number of beats per minute" arrow>
+                        <InputGroup className="mb-3">
+                            <InputGroup.Prepend>
+                                <InputGroup.Text>QPM</InputGroup.Text>
+                            </InputGroup.Prepend>
+                            <FormControl placeholder={qpm} type="text" onChange={onQPMChanged}/>
+                        </InputGroup>
+                    </Tooltip>
                 </div>{' '}
                     
                 <div style={{display: "inline-block"}}>
-                    <InputGroup className="mb-3">
-                        <InputGroup.Prepend>
-                            <InputGroup.Text>Temperature</InputGroup.Text>
-                        </InputGroup.Prepend>
-                        <RangeSlider
-                            value={temperature}
-                            min = {0.8}
-                            max = {1.6}
-                            step = {0.1}
-                            tooltip = {"on"}
-                            onChange={e => setTemperature(Number(e.target.value))}
-                        />
-                    </InputGroup>
+                    <Tooltip title = "the musical 'color' of your melody" arrow> 
+                        <InputGroup className="mb-3">
+                            <InputGroup.Prepend>
+                                <InputGroup.Text>Temperature</InputGroup.Text>
+                            </InputGroup.Prepend>
+                            <RangeSlider
+                                value={temperature}
+                                min = {0.8}
+                                max = {1.6}
+                                step = {0.1}
+                                tooltip = {"on"}
+                                onChange={e => setTemperature(Number(e.target.value))}
+                            />
+                        </InputGroup>
+                    </Tooltip>
                 </div>
 
                 <br />
