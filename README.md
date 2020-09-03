@@ -12,13 +12,13 @@ All of us are makers of music, either as listeners of music or instrumentalists,
 
 Noteflow is an ML-assisted music notebook designed with collaboration and simplicity in mind. **Magenta-generated melodies are parsed and converted into notes and rests on a musical staff** for convenience and readability, since we want users to be able to play the melody on, for example, a piano.
 
-Our app also allows users to **play back their generated melodies** using Tone.js, highlighting the notes as they are played. Options for **key, tempo, and temperature** (i.e. “randomness”) allows users to mold the generated melodies to perfectly fit their creative ideas or existing projects.
+Our app also allows users to **play back their generated melodies** using Tone.js, highlighting the notes as they are played. Options for **key, tempo, and temperature** (i.e. “randomness”) allow users to mold the generated melodies to perfectly fit their creative ideas or existing projects.
 
 By utilizing the functionality of our backend API, **Noteflow allows users to save, load, and share melodies created in their notebooks, as well as to import melodies created by others** via unique melody IDs. Loaded/imported melodies can be played back in the original key and tempo that the melody was saved in.
 
 ## How we built it
 
-**Frontend:** Our client is built using React and Bootstrap and is hosted on Firebase ([view Noteflow here](http://noteflow-bitrate.web.app/)). We used VexFlow for formatting the staff and notational representation, Tone.js in order to enable MIDI processing and playback of our note sequences, and Magenta.js’s MelodyRNN model in order to create monophonic melodies, which users can save, load, and share via functionalities provided by our backend. We also wrote our own mini-library for handling pitch-to-note transcription and key signatures (e.g. adding sharps, flats, and naturals to notes on the staff where needed).
+**Frontend:** Our client is built using React and Bootstrap and is hosted on Firebase ([view Noteflow here](http://noteflow-bitrate.web.app/)). We used VexFlow for formatting the staff and notational representation, Tone.js for MIDI processing and playback of our note sequences, and Magenta.js’s MelodyRNN model for creating monophonic melodies, which users can save, load, and share via functionalities provided by our backend. We also wrote our own mini-library for handling pitch-to-note transcription and key signatures (e.g. adding sharps, flats, and naturals to notes on the staff where needed).
 
 **Backend:** Our server endpoint is implemented with Flask and SQLite3 and is hosted on AWS. We developed an API endpoint from scratch in order to manage user accounts and authentication, as well as to add functionality for saving, loading, deleting, and sharing saved melodies stored in our database. It accomplishes these tasks using JWT tokens (stored by the client as a browser cookie), as well as serialization techniques for melody data.
 
@@ -30,7 +30,7 @@ By utilizing the functionality of our backend API, **Noteflow allows users to sa
 
 * Like many other teams, this was our first remote hackathon, which required us to explore different approaches to splitting up tasks and merging codebases.
 
-* We also ran into issues with time since most of us had already started school in mid-August, though in the end we were able to complete our application on time -- **though not without some late night coding** :)
+* We also ran into issues with time since most of us had already started school in mid-August, but in the end, we were able to complete our application on time -- **though not without some late-night coding** :)
 
 ## Accomplishments that we’re proud of
 
@@ -46,4 +46,4 @@ As a group, we all gained invaluable experience with the technologies we used on
 
 ## What’s next
 
-As we’ve said above, our main goal is to make integrating Noteflow into a composer/producer's workflow as seamless as possible. As such, we hope to be able to improve the machine learning models to make melody creation even more customizable, whether it’s by adding adjusters for melody length and range or by creating ML models to learn the different composition styles of each user in the Flask backend. Some other features that we plan to implement in the future include integration with social media platforms and note-labelling & tooltips for accessibility.
+As we’ve said above, our main goal is to make integrating Noteflow into a composer/producer's workflow as seamless as possible. As such, we hope to be able to improve the machine learning models to make melody creation even more customizable, whether it’s by adding adjusters for melody length and range or by creating ML models to learn the different composition styles of each user in the Flask backend. Some other features that we plan to implement in the future include integration with social media platforms and note-labeling & tooltips for accessibility.
