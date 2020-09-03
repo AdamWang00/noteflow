@@ -425,43 +425,43 @@ const App = (props) => {
                 <br />
 
                 <div className="keyInput" style={{display: "inline-block"}}>
-                    <Tooltip key = "the tonal center of your melody" arrow>
-                        <InputGroup className="mb-3">
+                    <InputGroup className="mb-3">
+                        <Tooltip title = "tonal center of the melody" arrow>
                             <InputGroup.Prepend>
                                 <InputGroup.Text>Key</InputGroup.Text>
                             </InputGroup.Prepend>
-                            <FormControl placeholder={keySignature} type="text" onChange={onKeyChanged}/>
-                        </InputGroup>
-                    </Tooltip>
+                        </Tooltip>
+                        <FormControl placeholder={keySignature} type="text" onChange={onKeyChanged}/>
+                    </InputGroup>
                 </div> {' '}
 
                 <div className="qpmInput" style={{display: "inline-block"}}>
-                    <Tooltip title = "the number of beats per minute" arrow>
-                        <InputGroup className="mb-3">
+                    <InputGroup className="mb-3">
+                        <Tooltip title = "quarter notes, or beats, per minute" arrow>
                             <InputGroup.Prepend>
                                 <InputGroup.Text>QPM</InputGroup.Text>
                             </InputGroup.Prepend>
-                            <FormControl placeholder={qpm} type="text" onChange={onQPMChanged}/>
-                        </InputGroup>
-                    </Tooltip>
+                        </Tooltip>
+                        <FormControl placeholder={qpm} type="text" onChange={onQPMChanged}/>
+                    </InputGroup>
                 </div>{' '}
                     
                 <div style={{display: "inline-block"}}>
-                    <Tooltip title = "the musical 'color' of your melody" arrow> 
-                        <InputGroup className="mb-3">
+                    <InputGroup className="mb-3">
+                        <Tooltip title = "entropy of generated melody" arrow>
                             <InputGroup.Prepend>
                                 <InputGroup.Text>Temperature</InputGroup.Text>
                             </InputGroup.Prepend>
-                            <RangeSlider
-                                value={temperature}
-                                min = {0.8}
-                                max = {1.6}
-                                step = {0.1}
-                                tooltip = {"on"}
-                                onChange={e => setTemperature(Number(e.target.value))}
-                            />
-                        </InputGroup>
-                    </Tooltip>
+                        </Tooltip>
+                        <RangeSlider
+                            value={temperature}
+                            min = {0.8}
+                            max = {1.6}
+                            step = {0.1}
+                            tooltip = {"on"}
+                            onChange={e => setTemperature(Number(e.target.value))}
+                        />
+                    </InputGroup>
                 </div>
 
                 <br />
