@@ -7,6 +7,7 @@ import datetime
 
 users = Blueprint('users', __name__)
 
+session_days = 365
 
 @users.route("/register", methods=['POST'])
 def register():
@@ -25,7 +26,7 @@ def register():
 	db.session.commit()
 
 	token = jwt.encode({'name': name, 'password': password, 'exp': datetime.datetime.utcnow()
-		+ datetime.timedelta(minutes=15)}, current_app.config['SECRET_KEY'])
+		+ datetime.timedelta(days=session_days)}, current_app.config['SECRET_KEY'])
 	return jsonify(token=token.decode('utf-8'))
 
 
@@ -39,7 +40,7 @@ def login():
 	user = User.query.filter_by(name=name).first()
 	if user and user.verify_password(password):
 		token = jwt.encode({'name': name, 'password': password, 'exp': datetime.datetime.utcnow()
-		+ datetime.timedelta(minutes=15)}, current_app.config['SECRET_KEY'])
+		+ datetime.timedelta(days=session_days)}, current_app.config['SECRET_KEY'])
 		return jsonify(token=token.decode('utf-8'))
 
 	return jsonify(error="Invalid credentials")
