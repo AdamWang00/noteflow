@@ -1,7 +1,6 @@
 {
   "hosting": {
-    "public": "client/build",
-    "site": "noteflow-bitrate",
+    "public": "build",
     "ignore": [
       "firebase.json",
       "**/.*",
