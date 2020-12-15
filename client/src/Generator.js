@@ -2,7 +2,6 @@ import React from 'react';
 import Button from 'react-bootstrap/Button';
 import * as mm from "@magenta/music";
 import * as Tone from 'tone';
-import Vex from 'vexflow';
 
 const Generator = (props) => {
     const { temperature, melodyRnn, updateNotes } = props;
@@ -13,12 +12,12 @@ const Generator = (props) => {
         let midi_note = Tone.Frequency(freq).toMidi();
         const seed = {
             notes: [
-            { pitch: midi_note, quantizedStartStep: 0, quantizedEndStep: 4 }
+            { pitch: midi_note, quantizedStartStep: 0, quantizedEndStep: 1 }
             ],
-            totalQuantizedSteps: 4,
+            totalQuantizedSteps: 1,
             quantizationInfo: { stepsPerQuarter: 4}
         };
-        const steps = 28;
+        const steps = 31;
 
         const result = await melodyRnn.continueSequence(seed, steps, temperature);
         const combined = mm.sequences.concatenate([seed, result]);

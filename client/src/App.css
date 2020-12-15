@@ -6,8 +6,8 @@
 .startButton {
     color: #7DA734;
     font-size: 36px;
-    height: 80px;
-    width: 160px;
+    height: 100px;
+    width: 200px;
     transition: background-color 0.2s, color 0.2s;
     background-color: #EEF2E6;
     border: 2px solid #9DD241;

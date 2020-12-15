@@ -121,6 +121,7 @@ const App = (props) => {
     const timeouts = React.useRef([]);
 
     const [started, setStarted] = React.useState(false);
+    const [startButtonText, setStartButtonText] = React.useState("start");
     const [play, setPlay] = React.useState(false);
     const [index, setIndex] = React.useState(0);
 
@@ -131,8 +132,10 @@ const App = (props) => {
     const [notes, setNotes] = React.useState(defaultNotes);
 
     const onStart = async () => {
+        const t = setTimeout(() => setStartButtonText("starting..."), 100);
         await Tone.start();
         await melodyRnnLoaded;
+        clearTimeout(t);
         setStarted(true);
         const name = await checkAuth();
         setAuth(name);
@@ -408,7 +411,7 @@ const App = (props) => {
                 <h1 className="startHeader">welcome to <span className="noteflow">noteflow</span></h1>
                 <p className="startSubheader">a notebook for collaborative melody composition using magenta</p>
                 <br />
-                <button className="startButton" onClick={onStart}>start</button>
+                <button className="startButton" onClick={onStart}>{startButtonText}</button>
             </div>;
         return (
             <div className="jumbo">
